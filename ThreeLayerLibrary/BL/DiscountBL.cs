@@ -3,6 +3,7 @@ using MySqlConnector;
 using System.Collections.Generic;
 namespace DAL;
 
+
 public class DiscountByPolicy
 {
     public string Title { get; set; } = "default";
