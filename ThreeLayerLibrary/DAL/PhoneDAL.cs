@@ -13,8 +13,7 @@ namespace DAL
             Phone item = new Phone();
             try
             {
-                query = @"select phone_id, Phone_Name, Brand, Price, OS, Quantity
-                        from phones where Phone_ID=@itemId;";
+                query = @"select * from phones where Phone_ID=@itemId;";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@itemId", itemId);
@@ -38,9 +37,20 @@ namespace DAL
             item.PhoneID = reader.GetInt32("Phone_ID");
             item.PhoneName = reader.GetString("Phone_Name");
             item.Brand = reader.GetString("Brand");
+            item.CPU = reader.GetString("CPU");
+            item.RAM = reader.GetString("RAM");
+            item.DiscountPrice = reader.GetDecimal("Discountprice");
             item.Price = reader.GetDecimal("Price");
             item.OS = reader.GetString("OS");
+            item.SimSlot = reader.GetString("Sim_Slot");
+            item.ScreenHz = reader.GetString("Screen_Hz");
+            item.ScreenResolution = reader.GetString("Screen_Resolution");
+            item.ROM = reader.GetString("ROM");
+            item.StorageMemory = reader.GetString("StorageMemory");
+            item.MobileNetwork = reader.GetString("Mobile_Network");
+            item.OS = reader.GetString("OS");
             item.Quantity = reader.GetInt32("Quantity");
+            item.PhoneSize = reader.GetString("Phone_Size");
             return item;
         }
         public List<Phone> GetItems()
@@ -48,7 +58,7 @@ namespace DAL
             List<Phone> lst = new List<Phone>();
             try
             {
-                MySqlCommand cmdDataBase = new MySqlCommand("SELECT Phone_ID, Phone_Name, Brand, Price, OS , Quantity FROM phones;", connection);
+                MySqlCommand cmdDataBase = new MySqlCommand("SELECT * FROM phones;", connection);
                 MySqlDataReader DBReader = null;
                 DBReader = cmdDataBase.ExecuteReader();
 
