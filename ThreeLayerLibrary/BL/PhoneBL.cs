@@ -31,5 +31,4 @@ public class PhoneBL
             else return idal.Search(phoneInformation);
         }
     }
-    
 }

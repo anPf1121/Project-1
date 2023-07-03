@@ -35,7 +35,7 @@ namespace Ults
             Console.WriteLine(@"                                                                                                                                                                            
 █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████");
         }
-        
+
         public void Title(string? title, string? subTitle)
         {
             if (title != null)
@@ -79,7 +79,27 @@ namespace Ults
         }
         public void PrintPhoneInfo(Phone phone)
         {
-            Console.WriteLine("| {0, 10} | {1, 30} | {2, 15} | {3, 15} | {4, 15} |", phone.PhoneID, phone.PhoneName, phone.Brand, phone.Price, phone.OS);
+            Console.WriteLine("| {0, 10} | {1, 30} | {2, 15} | {3, 15} | {4, 15} | {5, 15}  |", phone.PhoneID, phone.PhoneName, phone.Brand, phone.Price, phone.OS, phone.Quantity);
+        }
+        public void PrintPhoneDetailsInfo(Phone phone)
+        {
+            Console.WriteLine("Phone ID:", phone.PhoneID);
+            Console.WriteLine("Phone name:", phone.PhoneName);
+            Console.WriteLine("Brand:", phone.Brand);
+            Console.WriteLine("CPU:", phone.CPU);
+            Console.WriteLine("RAM:", phone.RAM);
+            Console.WriteLine("Discount Price:", phone.DiscountPrice);
+            Console.WriteLine("Price:", phone.Price);
+            Console.WriteLine("Battery capacity:", phone.BatteryCapacity);
+            Console.WriteLine("OS:", phone.OS);
+            Console.WriteLine("Sim_Slot:", phone.SimSlot);
+            Console.WriteLine("Screen Hz:", phone.ScreenHz);
+            Console.WriteLine("Screen Resolution:", phone.ScreenResolution);
+            Console.WriteLine("ROM:", phone.ROM);
+            Console.WriteLine("Storage Memory:", phone.StorageMemory);
+            Console.WriteLine("Mobile Network:", phone.MobileNetwork);
+            Console.WriteLine("Quantity:", phone.Quantity);
+            Console.WriteLine("Phone Size:", phone.PhoneSize);
         }
     }
 }
