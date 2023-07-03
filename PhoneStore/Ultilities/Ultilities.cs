@@ -65,8 +65,7 @@ namespace Ults
                         Console.WriteLine("{0,55}" + "< " + $"{currentPage}/{countPage}" + " >", " ");
                         Console.WriteLine("========================================================================================================================");
                         Console.WriteLine("Press 'Left Arrow' To Back Previous Page, 'Right Arror' To Next Page");
-                        Console.WriteLine("Input Phone ID to view details:");
-                        Console.Write("Press 'Space' To Start Creating Order, 'B' To Back Previous Menu, ");
+                        Console.Write("Press 'Space' To View Phone Details, 'B' To Back Previous Menu");
                         input = Console.ReadKey();
                         if (currentPage <= countPage)
                         {
@@ -85,6 +84,7 @@ namespace Ults
 
                             if (input.Key == ConsoleKey.Spacebar)
                             {
+
                                 Console.Clear();
                                 Console.WriteLine("========================================================================================================================");
                                 Console.WriteLine("| {0, 10} | {1, 30} | {2, 15} | {3, 15} | {4, 15} | {5, 15}  |", "ID", "Phone Name", "Brand", "Price", "OS", "Quantity");
@@ -100,7 +100,7 @@ namespace Ults
                                 do
                                 {
                                     validInput = false;
-                                    Console.WriteLine("Continue to create invoices or change the phone listing page ? Press Y to continue or press N to switch pages(Y / N):");
+                                    Console.WriteLine("Continue to select phone to view details or change the phone list page ? Press Y to continue or press N to switch pages(Y / N):");
                                     input2 = Console.ReadKey(true);
                                     if (input2.Key == ConsoleKey.Y)
                                     {
@@ -276,24 +276,16 @@ namespace Ults
                                     {
                                         do
                                         {
-                                            Console.Write("👉 Input Phone ID To Add To Order: ");
+                                            Console.Write("👉 Input Phone ID To view Phone Details: ");
                                             int.TryParse(Console.ReadLine(), out phoneId);
 
                                             if (phoneId <= 0 || phoneId > phones.Count())
                                                 ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Phone ID, Please Try Again");
-
                                         } while (phoneId <= 0 || phoneId > phones.Count());
                                         Phone phone = phoneBL.GetItemById(phoneId);
                                         if (phone != null)
                                         {
-                                            do
-                                            {
-                                                Console.Write("👉 Enter Quantity: ");
-                                                int.TryParse(Console.ReadLine(), out phoneQuantity);
-                                                if (phoneQuantity <= 0 || phoneQuantity > phone.Quantity)
-                                                    ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Quantity, Please Try Again");
-                                            } while (phoneQuantity <= 0 || phoneQuantity > phone.Quantity);
-
+                                            ConsoleUlts.PrintPhoneDetailsInfo(phone);
                                         }
 
                                         return 1;
