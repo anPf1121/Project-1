@@ -13,7 +13,7 @@ namespace DAL
             Phone item = new Phone();
             try
             {
-                query = @"select phone_id, Phone_Name, Brand, Price, OS
+                query = @"select phone_id, Phone_Name, Brand, Price, OS, Quantity
                         from phones where Phone_ID=@itemId;";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.Clear();
@@ -25,7 +25,10 @@ namespace DAL
                 }
                 reader.Close();
             }
-            catch { }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             return item;
         }
@@ -37,6 +40,7 @@ namespace DAL
             item.Brand = reader.GetString("Brand");
             item.Price = reader.GetDecimal("Price");
             item.OS = reader.GetString("OS");
+            item.Quantity = reader.GetInt32("Quantity");
             return item;
         }
         public List<Phone> GetItems()
@@ -44,17 +48,16 @@ namespace DAL
             List<Phone> lst = new List<Phone>();
             try
             {
-                MySqlCommand cmdDataBase = new MySqlCommand("SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones", connection);
-                MySqlDataReader DBReader;
+                MySqlCommand cmdDataBase = new MySqlCommand("SELECT Phone_ID, Phone_Name, Brand, Price, OS , Quantity FROM phones;", connection);
+                MySqlDataReader DBReader = null;
                 DBReader = cmdDataBase.ExecuteReader();
+
+
                 while (DBReader.Read())
                 {
-                    lst = new List<Phone>();
-                    while (DBReader.Read())
-                    {
-                        lst.Add(GetItem(DBReader));
-                    }
+                    lst.Add(GetItem(DBReader));
                 }
+
                 DBReader.Close();
             }
             catch (Exception ex)
@@ -69,8 +72,8 @@ namespace DAL
             try
             {
                 MySqlCommand command = new MySqlCommand("", connection);
-                query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones WHERE Phone_Name LIKE @input
-                OR Brand LIKE @input OR CPUnit LIKE @input OR RAM LIKE @input OR Battery_Capacity LIKE @input OR OS LIKE @input
+                query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS, Quantity FROM phones WHERE Phone_Name LIKE @input
+                OR Brand LIKE @input OR CPU LIKE @input OR RAM LIKE @input OR Battery_Capacity LIKE @input OR OS LIKE @input
                 OR Sim_Slot LIKE @input OR Screen_Hz LIKE @input OR Screen_Resolution LIKE @input OR ROM LIKE @input OR Mobile_Network LIKE @input 
                 OR Phone_Size LIKE @input OR Price LIKE @input OR DiscountPrice LIKE @input;";
                 command.CommandText = query;
@@ -82,9 +85,10 @@ namespace DAL
                 }
                 reader.Close();
             }
-            catch(MySqlException ex) {
+            catch (MySqlException ex)
+            {
                 Console.WriteLine(ex.Message);
-             }
+            }
             return output;
         }
         public List<Phone> GetPhoneHaveDiscount()
@@ -118,12 +122,14 @@ namespace DAL
                 command.Parameters.AddWithValue("@price", phone.Price);
                 command.Parameters.AddWithValue("@os", phone.OS);
                 MySqlDataReader reader = command.ExecuteReader();
-                if(reader.Read()){
+                if (reader.Read())
+                {
                     phoneid = reader.GetInt32("Phone_ID");
                     check++;
                 }
                 reader.Close();
-                if(check==0){
+                if (check == 0)
+                {
                     query = @"insert into phones(phone_name, brand, price, os, quantity) value(@phonename, @brand, @price, @os, @quantity);";
                     command.CommandText = query;
                     command.Parameters.Clear();
@@ -133,7 +139,9 @@ namespace DAL
                     command.Parameters.AddWithValue("@os", phone.OS);
                     command.Parameters.AddWithValue("@quantity", phone.Quantity);
                     command.ExecuteNonQuery();
-                }else{
+                }
+                else
+                {
                     query = @"update phones set quantity = quantity+@quan 
                     where phone_id = @phoneid;";
                     command.CommandText = query;
@@ -143,7 +151,8 @@ namespace DAL
                     command.ExecuteNonQuery();
                 }
             }
-            catch(MySqlException ex) {
+            catch (MySqlException ex)
+            {
                 Console.WriteLine(ex.Message);
             }
             return true;
