@@ -17,7 +17,7 @@ public class CustomerDAL{
         output.Job = reader.GetString("Job");
         return output;
     }
-    public List<Customer> GetCustomerByName(string name){
+    public List<Customer> GetCustomersByName(string name){
         List<Customer> output = new List<Customer>();
         try{
             query = @"select * from customers where Customer_Name like @name;";

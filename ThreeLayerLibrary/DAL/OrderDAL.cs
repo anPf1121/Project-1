@@ -16,7 +16,7 @@ namespace DAL
     }
     public class OrderDAL
     {
-        
+
         private MySqlConnection connection = DbConfig.GetConnection();
         private string query = "";
         public Order GetOrder(MySqlDataReader reader)
@@ -34,19 +34,23 @@ namespace DAL
         public Order GetOrderByID(int id)
         {
             Order output = new Order();
-            try{
+            try
+            {
                 query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
                 from orders where order_id = @orderid;";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@orderid", id);
                 MySqlDataReader reader = command.ExecuteReader();
-                if(reader.Read()){
+                if (reader.Read())
+                {
                     output = GetOrder(reader);
                 }
                 reader.Close();
                 output.ListPhone = GetItemsInOrderByID(id);
-            }catch(MySqlException ex){
+            }
+            catch (MySqlException ex)
+            {
                 Console.WriteLine(ex.Message);
             }
             return output;
@@ -55,7 +59,8 @@ namespace DAL
         {
             PhoneDAL pdl = new PhoneDAL();
             List<Phone> currentList = new List<Phone>();
-            try{
+            try
+            {
                 query = @"select p.phone_id, p.phone_name, p.brand , p.price, p.os 
                 from phones p inner join orderdetails od on p.phone_id = od.phone_id
                 where od.order_id = @orderid;";
@@ -64,34 +69,40 @@ namespace DAL
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@orderid", id);
                 MySqlDataReader reader = command.ExecuteReader();
-                while(reader.Read()){
+                while (reader.Read())
+                {
                     int count = 0;
                     Phone a = pdl.GetItem(reader);
-                    foreach(var p in currentList){
-                        if(p.PhoneID == a.PhoneID && p.PhoneName == a.PhoneName && p.Price == a.Price &&p.Brand == a.Brand &&p.OS == a.OS)count++;
+                    foreach (var p in currentList)
+                    {
+                        if (p.PhoneID == a.PhoneID && p.PhoneName == a.PhoneName && p.Price == a.Price && p.Brand == a.Brand && p.OS == a.OS) count++;
                     }
-                    if(count ==0 )currentList.Add(a);
+                    if (count == 0) currentList.Add(a);
                 }
                 reader.Close();
                 int countitem = 0;
-                foreach(var aphone in currentList){
+                foreach (var aphone in currentList)
+                {
                     int numphone = 0;
-                query = @"select count(*) from phones p 
+                    query = @"select count(*) from phones p 
                 inner join orderdetails od on p.phone_id = od.phone_id
                 where od.order_id = @orderid and p.phone_id = @phoneid;";
-                command.CommandText = query;
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@orderid", id);
-                command.Parameters.AddWithValue("@phoneid", aphone.PhoneID);
-                reader = command.ExecuteReader();
-                if(reader.Read()){
-                    numphone = reader.GetInt32("count(*)");
+                    command.CommandText = query;
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@orderid", id);
+                    command.Parameters.AddWithValue("@phoneid", aphone.PhoneID);
+                    reader = command.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        numphone = reader.GetInt32("count(*)");
+                    }
+                    reader.Close();
+                    currentList[countitem].Quantity = numphone;
+                    countitem++;
                 }
-                reader.Close();
-                currentList[countitem].Quantity = numphone;
-                countitem++;
-                }
-            }catch(MySqlException ex){
+            }
+            catch (MySqlException ex)
+            {
                 Console.WriteLine(ex.Message);
             }
 
@@ -102,19 +113,20 @@ namespace DAL
             List<Order> output = new List<Order>();
             try
             {
-                switch(orderFilter){
+                switch (orderFilter)
+                {
                     case OrderFilter.GET_ORDER_PROCESSING_IN_DAY:
-                    query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
+                        query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
                 from orders where order_status = 'Unpaid' and date(order_date) = date(current_time());";
-                    break;
+                        break;
                     case OrderFilter.GET_ORDER_PAID_IN_DAY:
-                    query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
+                        query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
                 from orders where order_status = 'Paid' and date(order_date) = date(current_time());";
-                    break;
+                        break;
                     case OrderFilter.GET_ORDER_EXPORT_IN_DAY:
-                    query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
+                        query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
                 from orders where order_status = 'Export' and date(order_date) = date(current_time());";
-                    break;
+                        break;
                 }
                 MySqlCommand command = new MySqlCommand(query, connection);
                 MySqlDataReader reader = command.ExecuteReader();
@@ -138,19 +150,22 @@ namespace DAL
                 //Bat dau transaction
                 tr = connection.BeginTransaction();
                 MySqlCommand command = new MySqlCommand(connection, tr);
-                MySqlDataReader reader = null;
-                if(cdl.InsertCustomer(order.OrderCustomer)){
+                MySqlDataReader? reader = null;
+                if (cdl.InsertCustomer(order.OrderCustomer))
+                {
                     // Neu insert thanh cong tuc la truoc do chua ton tai customer nay
                     // Lay ra id cua nguoi customer vua moi insert vao database
                     query = @"select customer_id from customers order by customer_id desc limit 1;";
                     command.CommandText = query;
                     reader = command.ExecuteReader();
-                    if(reader.Read()){
+                    if (reader.Read())
+                    {
                         order.OrderCustomer.CustomerID = reader.GetInt32("customer_id");
                     }
                     reader.Close();
                 }
-                else{
+                else
+                {
                     // Neu insert that bai thi truoc do da ton tai customer nay
                     // Lay ra id cua customer nay
                     query = @"select customer_id where customer_name = @cusname and Phone_Number = @phonenumber;";
@@ -158,10 +173,15 @@ namespace DAL
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@cusname", order.OrderCustomer.CustomerName);
                     command.Parameters.AddWithValue("@phonenumber", order.OrderCustomer.PhoneNumber);
-                    if(reader.Read()){
-                        order.OrderCustomer.CustomerID = reader.GetInt32("customer_id");
+                    if (reader != null)
+                    {
+                        if (reader.Read())
+                        {
+                            order.OrderCustomer.CustomerID = reader.GetInt32("customer_id");
+                        }
+                        reader.Close();
                     }
-                    reader.Close();
+                    else return false;
                 }
                 //Thuc thi Insert order vao DB
                 query = @"insert into orders(customer_id, seller_id) 
@@ -184,7 +204,7 @@ namespace DAL
                 //Kiem tra cac mat hang co trong Cart
                 foreach (var phone in order.ListPhone)
                 {
-                    
+
                     int phoneid = 0;
                     int quantity = 0;
                     int countPhoneNotOrderYet = 0;
@@ -210,20 +230,23 @@ namespace DAL
                         if (countPhoneNotOrderYet > 0)
                         {
                             //neu ton tai thi kiem tra so luong co hop le hay khong
-                            if(phone.Quantity > quantity){
+                            if (phone.Quantity > quantity)
+                            {
                                 result = false;
                                 break;
-                            }else{
+                            }
+                            else
+                            {
                                 query = @"insert into orderdetails(order_id, phone_id, phone_imei) 
                                 value(@orderid, @phoneid, left(uuid(), 15));";
                                 command.CommandText = query;
                                 command.Parameters.Clear();
                                 command.Parameters.AddWithValue("@orderid", order.OrderID);
                                 command.Parameters.AddWithValue("@phoneid", phoneid);
-                                for(int i = 0 ; i<phone.Quantity;i++)command.ExecuteNonQuery();
+                                for (int i = 0; i < phone.Quantity; i++) command.ExecuteNonQuery();
                                 countphone++;
                             }
-                           
+
                         }
                         else
                         {
@@ -265,36 +288,38 @@ namespace DAL
             }
             return result;
         }
-        public bool UpdateOrder(int statusFilter, Order order){
-            try{
+        public bool UpdateOrder(int statusFilter, Order order)
+        {
+            try
+            {
                 MySqlCommand command = new MySqlCommand("", connection);
-                switch(statusFilter){
+                switch (statusFilter)
+                {
                     case StatusFilter.Paid:
-                    query = @"update orders set accountant_id = @accountantid, order_status = @orderstatus, paymentmethod = @paymentmethod 
+                        query = @"update orders set accountant_id = @accountantid, order_status = @orderstatus, paymentmethod = @paymentmethod 
                 where order_id = @orderid;";
-                    break;
+                        command.CommandText = query;
+                        command.Parameters.Clear();
+                        command.Parameters.AddWithValue("@accountantid", order.OrderAccountant.StaffID);
+                        command.Parameters.AddWithValue("@orderstatus", order.OrderStatus);
+                        command.Parameters.AddWithValue("@paymentmethod", order.PaymentMethod);
+                        command.Parameters.AddWithValue("@orderid", order.OrderID);
+                        command.ExecuteNonQuery();
+                        break;
                     case StatusFilter.Export:
-                    query = @"update orders set order_status = @orderstatus where order_id = @orderid;";
-                    break;
+                        query = @"update orders set order_status = @orderstatus where order_id = @orderid;";
+                        command.CommandText = query;
+                        command.Parameters.Clear();
+                        command.Parameters.AddWithValue("@orderstatus", order.OrderStatus);
+                        command.Parameters.AddWithValue("@orderid", order.OrderID);
+                        command.ExecuteNonQuery();
+                        break;
+                    default:
+                        return false;
                 }
-                if(statusFilter == StatusFilter.Paid){
-                    command.CommandText = query;
-                    command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@accountantid", order.OrderAccountant.StaffID);
-                    command.Parameters.AddWithValue("@orderstatus", order.OrderStatus);
-                    command.Parameters.AddWithValue("@paymentmethod", order.PaymentMethod);
-                    command.Parameters.AddWithValue("@orderid", order.OrderID);
-                    command.ExecuteNonQuery();
-                }
-                else if(statusFilter == StatusFilter.Export){
-                    command.CommandText = query;
-                    command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@orderstatus", order.OrderStatus);
-                    command.Parameters.AddWithValue("@orderid", order.OrderID);
-                    command.ExecuteNonQuery();
-                }
-                else return false;
-            }catch(MySqlException ex){
+            }
+            catch (MySqlException ex)
+            {
                 Console.WriteLine(ex.Message);
             }
             return true;

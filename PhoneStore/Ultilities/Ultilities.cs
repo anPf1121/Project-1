@@ -1,6 +1,7 @@
 using Persistence;
 using BL;
 using Enum;
+using Org.BouncyCastle.Math.Field;
 
 namespace Ults
 {
@@ -53,18 +54,18 @@ namespace Ults
                     );
                     while (active)
                     {
-                        Console.WriteLine("=================================================================================================================");
-                        Console.WriteLine("| {0, 10} | {1, 30} | {2, 15} | {3, 15} | {4, 15} |", "ID", "Phone Name", "Brand", "Price", "OS");
-                        Console.WriteLine("=================================================================================================================");
+                        Console.WriteLine("========================================================================================================================");
+                        Console.WriteLine("| {0, 10} | {1, 30} | {2, 15} | {3, 15} | {4, 15} | {5, 15}  |", "ID", "Phone Name", "Brand", "Price", "OS", "Quantity");
+                        Console.WriteLine("========================================================================================================================");
                         foreach (Phone phone in phones[currentPage])
                         {
                             ConsoleUlts.PrintPhoneInfo(phone);
                         }
-                        Console.WriteLine("=================================================================================================================");
+                        Console.WriteLine("========================================================================================================================");
                         Console.WriteLine("{0,55}" + "< " + $"{currentPage}/{countPage}" + " >", " ");
-                        Console.WriteLine("=================================================================================================================");
+                        Console.WriteLine("========================================================================================================================");
                         Console.WriteLine("Press 'Left Arrow' To Back Previous Page, 'Right Arror' To Next Page");
-                        Console.Write("Press 'Space' To Start Creating Order, 'B' To Back Previous Menu");
+                        Console.Write("Press 'Space' To View Phone Details, 'B' To Back Previous Menu");
                         input = Console.ReadKey();
                         if (currentPage <= countPage)
                         {
@@ -73,32 +74,33 @@ namespace Ults
                                 if (currentPage <= countPage - 1) currentPage++;
                                 Console.Clear();
                             }
-                            if (input.Key == ConsoleKey.LeftArrow)
+                            else if (input.Key == ConsoleKey.LeftArrow)
                             {
                                 if (currentPage > 1) currentPage--;
                                 Console.Clear();
                             }
 
-                            if (input.Key == ConsoleKey.B) return null;
+                            else if (input.Key == ConsoleKey.B) return null;
 
-                            if (input.Key == ConsoleKey.Spacebar)
+                            else if (input.Key == ConsoleKey.Spacebar)
                             {
+
                                 Console.Clear();
-                                Console.WriteLine("=================================================================================================================");
-                                Console.WriteLine("| {0, 10} | {1, 30} | {2, 15} | {3, 15} | {4, 15} |", "ID", "Phone Name", "Brand", "Price", "OS");
-                                Console.WriteLine("=================================================================================================================");
+                                Console.WriteLine("========================================================================================================================");
+                                Console.WriteLine("| {0, 10} | {1, 30} | {2, 15} | {3, 15} | {4, 15} | {5, 15}  |", "ID", "Phone Name", "Brand", "Price", "OS", "Quantity");
+                                Console.WriteLine("========================================================================================================================");
 
                                 foreach (Phone phone in phones[currentPage])
                                 {
                                     ConsoleUlts.PrintPhoneInfo(phone);
                                 }
-                                Console.WriteLine("=================================================================================================================");
+                                Console.WriteLine("========================================================================================================================");
                                 Console.WriteLine("{0,55}" + "< " + $"{currentPage}/{countPage}" + " >", " ");
-                                Console.WriteLine("=================================================================================================================");
+                                Console.WriteLine("========================================================================================================================");
                                 do
                                 {
                                     validInput = false;
-                                    Console.WriteLine("Continue to create invoices or change the phone listing page ? Press Y to continue or press N to switch pages(Y / N):");
+                                    Console.WriteLine("Continue to select phone to view details or change the phone list page ? Press Y to continue or press N to switch pages(Y / N):");
                                     input2 = Console.ReadKey(true);
                                     if (input2.Key == ConsoleKey.Y)
                                     {
@@ -116,6 +118,10 @@ namespace Ults
                                         consoleUlts.Alert(Feature.Alert.Error, "Invalid Input (Y/N)");
                                     }
                                 } while (!validInput);
+                            }
+                            else
+                            {
+                                Console.Clear();
                             }
                         }
                     }
@@ -220,9 +226,12 @@ namespace Ults
         }
         public int CreateOrderMenuHandle()
         {
-            int reEnterOrCancel;
-            bool active = true, activeSearchPhone = true;
+            Order order = new Order();
+            bool active = true;
+            bool activeSearchPhone = true;
+            bool active2 = true;
             List<Phone>? phones = phoneBL.GetAllItem();
+            ConsoleKeyInfo input = new ConsoleKeyInfo();
             if (phones != null)
             {
                 List<Phone>? listSearch = new List<Phone>();
@@ -262,37 +271,88 @@ namespace Ults
          ██ ██      ██   ██ ██   ██ ██      ██   ██     ██      ██   ██ ██    ██ ██  ██ ██ ██      
     ███████ ███████ ██   ██ ██   ██  ██████ ██   ██     ██      ██   ██  ██████  ██   ████ ███████ "
                                     );
-                                    reEnterOrCancel = MenuHandle(null, null, menuOption);
-                                    switch (reEnterOrCancel)
-                                    {
-                                        case (int)Enum.Feature.SearchPhone.ReEnterPhoneInfo:
-                                            PressEnterTo("Re-Enter Phone Infomation");
-                                            break;
-                                        case (int)Enum.Feature.SearchPhone.CancelOrder:
-                                            PressEnterTo("Back Previous Menu");
-                                            activeSearchPhone = false;
-                                            break;
-
-                                    }
+                                    activeSearchPhone = ReEnterOrCancel();
                                 }
                                 else
                                 {
-                                    bool? temp = ListPhonePagination(listSearch);
-                                    int phoneId;
-                                    if (temp != null)
+                                    do
                                     {
-                                        do
+                                        bool? temp = ListPhonePagination(listSearch);
+                                        int phoneId;
+                                        int phoneQuantity;
+                                        if (temp != null)
                                         {
-                                            Console.Write("👉 Input Phone ID To Add To Order: ");
-                                            int.TryParse(Console.ReadLine(), out phoneId);
+                                            do
+                                            {
+                                                Console.Write("👉 Input Phone ID To view Phone Details: ");
+                                                int.TryParse(Console.ReadLine(), out phoneId);
 
-                                            if (phoneId <= 0 || phoneId > phones.Count())
-                                                ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Phone ID, Please Try Again");
 
-                                        } while (phoneId <= 0 || phoneId > phones.Count());
-                                        return 1;
-                                    }
-                                    else return 0;
+                                                if (phoneId <= 0 || phoneId > phones.Count())
+                                                    ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Phone ID, Please Try Again");
+
+                                            } while (phoneId <= 0 || phoneId > phones.Count());
+
+                                            Phone phone = phoneBL.GetItemById(phoneId);
+                                            if (phone != null)
+                                            {
+                                                ConsoleUlts.PrintPhoneDetailsInfo(phone);
+                                                Console.WriteLine("Press Enter To Add this phone to Order or Press B to back previous Menu: ");
+                                                input = Console.ReadKey(true);
+                                                if (input.Key == ConsoleKey.B)
+                                                    break;
+
+                                                else if (input.Key == ConsoleKey.Enter)
+                                                {
+                                                    // input phone quantity (số lượng điện thoại)
+                                                    do
+                                                    {
+                                                        Console.Write("Enter Quantity: ");
+                                                        int.TryParse(Console.ReadLine(), out phoneQuantity);
+
+                                                        if (phoneQuantity <= 0 || phoneQuantity > phone.Quantity)
+                                                            ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Quantity, Please Try Again");
+                                                    } while (phoneQuantity <= 0 || phoneQuantity > phone.Quantity);
+
+                                                    // Nhập IMEI cho mỗi điện thoại tương ứng với số lần so với Quantity
+
+                                                    order.ListPhone.Add(phone);
+                                                    // hỏi người dùng có muốn chọn thêm điện thoại vào Hóa đơn được hay không?
+                                                    Console.WriteLine("Press 'Y' To Choose More Other Phone or Press 'N' To Continue Input customer Information");
+                                                    input = Console.ReadKey(true);
+                                                    if (input.Key == ConsoleKey.Y)
+                                                    {
+                                                        break;
+                                                    }
+                                                    // NHập thông tin khách hàng mua
+                                                    else if (input.Key == ConsoleKey.N)
+                                                    {
+                                                        Customer customer = new Customer();
+                                                        ConsoleUlts.TinyLine();
+                                                        Console.WriteLine("CUSTOMER INFORMATION");
+                                                        Console.Write("Customer Name: ");
+                                                        customer.CustomerName = Console.ReadLine() ?? "";
+                                                        Console.Write("Phone number: ");
+                                                        customer.PhoneNumber = Console.ReadLine() ?? "";
+                                                        Console.Write("Address: ");
+                                                        customer.Address = Console.ReadLine();
+                                                    }
+                                                }
+                                            }
+                                            // Confirm Order
+                                            Console.WriteLine("Press 'Y' To Confirm Order or Press 'N' to Cancel Order: ");
+                                            input = Console.ReadKey(true);
+                                            if (input.Key == ConsoleKey.Y)
+                                            {
+                                                // ở đây ta sẽ Insert Customer vào database thông qua lớp BL
+                                                // Insert order vào Database thông qua lớp BL
+                                                return 1;
+                                            }
+                                            else if (input.Key == ConsoleKey.N)
+                                                return 0;
+                                        }
+                                    } while (active2);
+
                                 }
                             } while (activeSearchPhone);
                             break;
@@ -341,6 +401,83 @@ namespace Ults
             }
         }
 
+        public bool ReEnterOrCancel()
+        {
+            int reEnterOrCancel;
+            bool result = true;
+            string[] menuOption = { "👉 Re-Enter Phone Information", "👉 Cancel Order" };
+            reEnterOrCancel = MenuHandle(null, null, menuOption);
+            switch (reEnterOrCancel)
+            {
+                case (int)Enum.Feature.SearchPhone.ReEnterPhoneInfo:
+                    PressEnterTo("Re-Enter Phone Infomation");
+                    break;
+                case (int)Enum.Feature.SearchPhone.CancelOrder:
+                    PressEnterTo("Back Previous Menu");
+                    result = false;
+                    break;
+            }
+            return result;
+
+        }
+        public void PaymentMenuHandle(Ultilities ultilities)
+        {
+            bool active = true;
+            string[] paymentItem = { "👉 Search Order by Status", "👉 Discount", "👉 Log Out" };
+            while (active)
+            {
+                switch (ultilities.MenuHandle(null, @"
+                    ██████   █████  ██    ██ ███    ███ ███████ ███    ██ ████████ 
+                    ██   ██ ██   ██  ██  ██  ████  ████ ██      ████   ██    ██    
+                    ██████  ███████   ████   ██ ████ ██ █████   ██ ██  ██    ██    
+                    ██      ██   ██    ██    ██  ██  ██ ██      ██  ██ ██    ██    
+                    ██      ██   ██    ██    ██      ██ ███████ ██   ████    ██", paymentItem))
+                {
+                    case 1:
+                        Console.WriteLine("INPUT ORDER ID:");
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        active = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        public void RevenueMenuHandle(Ultilities ultilities)
+        {
+            bool active = true;
+            string[] revenueItem = { "👉 Report Revenue in week", "👉 Report Revenue In Month", "👉 Report Revenue In Day", "👉 Report Revenue Quarter Of Year", "👉 Back To Previous Menu" };
+            while (active)
+            {
+                switch (ultilities.MenuHandle(null, @"
+                        ██████  ███████ ██    ██ ███████ ███    ██ ██    ██ ███████ 
+                        ██   ██ ██      ██    ██ ██      ████   ██ ██    ██ ██      
+                        ██████  █████   ██    ██ █████   ██ ██  ██ ██    ██ █████   
+                        ██   ██ ██       ██  ██  ██      ██  ██ ██ ██    ██ ██      
+                        ██   ██ ███████   ████   ███████ ██   ████  ██████  ███████ ", revenueItem))
+                {
+                    case 1:
+                        Console.WriteLine("Week Revenue: 1000$");
+                        break;
+                    case 2:
+                        Console.WriteLine("Month Revenue: 4000$");
+                        break;
+                    case 3:
+                        Console.WriteLine("Day Revenue: 150$");
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        active = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
         public int SellerMenu()
         {
             int result = 0;
@@ -360,6 +497,7 @@ namespace Ults
                         int createOrderStatus = CreateOrderMenuHandle();
                         if (createOrderStatus == 1) ConsoleUlts.Alert(Feature.Alert.Success, "Create Order Completed");
                         else if (createOrderStatus == -1) ConsoleUlts.Alert(Feature.Alert.Error, "Don't Have Any Phone To Create Order");
+                        else if (createOrderStatus == 0) ConsoleUlts.Alert(Feature.Alert.Warning, "Create Order Fail");
                         else break;
                         break;
                     case 2:
@@ -380,7 +518,7 @@ namespace Ults
             int result = 0;
             bool active = true;
             Ultilities ultilities = new Ultilities();
-            string[] menuItem = { "👉 Select Order", "👉 Payment", "👉 Revenue 1 Day", "👉 Log Out" };
+            string[] menuItem = { "👉 Payment", "👉 Revenue Report", "👉 Log Out" };
             while (active)
             {
                 switch (ultilities.MenuHandle(null,
@@ -391,15 +529,12 @@ namespace Ults
              ██   ██  ██████  ██████  ██████   ██████  ██   ████    ██    ██   ██ ██   ████    ██ ", menuItem))
                 {
                     case 1:
-                        Console.WriteLine("INPUT ORDER ID:");
+                        PaymentMenuHandle(ultilities);
                         break;
                     case 2:
-                        Console.WriteLine("Payment method");
+                        RevenueMenuHandle(ultilities);
                         break;
                     case 3:
-                        Console.WriteLine("Revenue method");
-                        break;
-                    case 4:
                         active = false;
                         result = 1;
                         break;
