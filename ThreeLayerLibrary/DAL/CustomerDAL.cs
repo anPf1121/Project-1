@@ -4,6 +4,10 @@ namespace DAL;
 public class CustomerDAL{
     private MySqlConnection connection = DbConfig.GetConnection();
     private string query = "";
+    public static class InformationFilter{
+        public const int GET_BY_PHONE = 0;
+        public const int GET_BY_ID = 1;
+    }
     public Customer GetCustomer(MySqlDataReader reader){
         Customer output = new Customer();
         output.CustomerID = reader.GetInt32("Customer_ID");
@@ -29,52 +33,57 @@ public class CustomerDAL{
         catch{}
         return output;
     }
-    public Customer GetCustomerByPhone(string phone){
+    public Customer GetCustomerByInfo(int informationFilter, string info){
         Customer output = new Customer();
         try{
-            query = @"select * from customers where Phone_Number like @phone;";
+            switch(informationFilter){
+                case InformationFilter.GET_BY_PHONE:
+                query = @"select * from customers where Phone_Number = @phone;";
+                break;
+                case InformationFilter.GET_BY_ID:
+                query = @"select * from customers where Customer_ID = @cusid; ";
+                break;
+            }
             MySqlCommand command = new MySqlCommand(query, connection);
             command.Parameters.Clear();
-            command.Parameters.AddWithValue("@name", "%"+phone+"%");
+            if(informationFilter == InformationFilter.GET_BY_PHONE)command.Parameters.AddWithValue("@phone", info);
+            if(informationFilter == InformationFilter.GET_BY_ID)command.Parameters.AddWithValue("@cusid", Convert.ToInt32(info));
             MySqlDataReader reader = command.ExecuteReader();
-            if(reader.Read()){
-                output = GetCustomer(reader);
-            }
+            if(reader.Read())output = GetCustomer(reader);
             reader.Close();
         }
-        catch{}
+        catch(MySqlException ex){
+            Console.WriteLine(ex.Message);
+        }
         return output;
     }
-    public Customer GetCustomerByID(int id){
-        Customer output = new Customer();
+    public bool InsertCustomer(Customer newcustomer){
+        int count =0;
         try{
-            query = @"select * from customers where customer_id = @id;";
+            query = @"select Customer_Name, Phone_Number, Address, Job from customers 
+            where Customer_Name = @cusname and Phone_Number = @phonenumber;";
             MySqlCommand command = new MySqlCommand(query, connection);
             command.Parameters.Clear();
-            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@cusname", newcustomer.CustomerName);
+            command.Parameters.AddWithValue("@phonenumber", newcustomer.PhoneNumber);
             MySqlDataReader reader = command.ExecuteReader();
-            if(reader.Read()){
-                output = GetCustomer(reader);
-            }
+            if(reader.Read())count++;
             reader.Close();
-        }
-        catch{}
-        return output;
-    }
-    public bool AddCustomer(Customer newcustomer){
-        try{
+            if(count == 0){
             query = @"insert into customers(Customer_Name, Phone_Number, Address, Job) value(@name, @phonenumber, @address, @job);";
-            MySqlCommand command = new MySqlCommand(query, connection);
+            command.CommandText = query;
             command.Parameters.Clear();
             command.Parameters.AddWithValue("@name", newcustomer.CustomerName);
             command.Parameters.AddWithValue("@phonenumber", newcustomer.PhoneNumber);
             command.Parameters.AddWithValue("@address", newcustomer.Address);
             command.Parameters.AddWithValue("@job", newcustomer.Job);
             command.ExecuteNonQuery();
+            return true;
+            }
         }
-        catch{
-            return false;
+        catch(MySqlException ex){
+            Console.WriteLine(ex.Message);
         }
-        return true;
+        return false;
     }
 }

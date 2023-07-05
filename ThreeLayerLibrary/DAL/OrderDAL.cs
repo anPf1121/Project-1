@@ -2,17 +2,30 @@ using Persistence;
 using MySqlConnector;
 namespace DAL
 {
+    public static class OrderFilter
+    {
+        public const int GET_ORDER_PROCESSING_IN_DAY = 0;
+        public const int GET_ORDER_PAID_IN_DAY = 1;
+        public const int GET_ORDER_EXPORT_IN_DAY = 2;
+    }
+    public static class StatusFilter
+    {
+        public const int Paid = 0;
+        public const int Export = 1;
+
+    }
     public class OrderDAL
     {
+        
         private MySqlConnection connection = DbConfig.GetConnection();
         private string query = "";
         public Order GetOrder(MySqlDataReader reader)
         {
             Order output = new Order();
             output.OrderID = reader.GetInt32("Order_ID");
-            output.CustomerID = reader.GetInt32("Customer_ID");
-            output.SellerID = reader.GetInt32("Seller_ID");
-            output.AccountantID = reader.GetInt32("Accountant_ID");
+            output.OrderCustomer.CustomerID = reader.GetInt32("Customer_ID");
+            output.OrderSeller.StaffID = reader.GetInt32("Seller_ID");
+            output.OrderAccountant.StaffID = reader.GetInt32("Accountant_ID");
             output.OrderDate = reader.GetDateTime("Order_Date");
             output.OrderStatus = reader.GetString("Order_Status");
             output.PaymentMethod = reader.GetString("Paymentmethod");
@@ -81,15 +94,28 @@ namespace DAL
             }catch(MySqlException ex){
                 Console.WriteLine(ex.Message);
             }
+
             return currentList;
         }
-        public List<Order> GetOrderUnpaidInDay()
+        public List<Order> GetOrders(int orderFilter)
         {
             List<Order> output = new List<Order>();
             try
             {
-                query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
-                from orders where order_status = 'Processing';";
+                switch(orderFilter){
+                    case OrderFilter.GET_ORDER_PROCESSING_IN_DAY:
+                    query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
+                from orders where order_status = 'Unpaid' and date(order_date) = date(current_time());";
+                    break;
+                    case OrderFilter.GET_ORDER_PAID_IN_DAY:
+                    query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
+                from orders where order_status = 'Paid' and date(order_date) = date(current_time());";
+                    break;
+                    case OrderFilter.GET_ORDER_EXPORT_IN_DAY:
+                    query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
+                from orders where order_status = 'Export' and date(order_date) = date(current_time());";
+                    break;
+                }
                 MySqlCommand command = new MySqlCommand(query, connection);
                 MySqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
@@ -101,65 +127,54 @@ namespace DAL
             catch { }
             return output;
         }
-        public List<Order> GetOrderPaidInDay()
-        {
-            List<Order> output = new List<Order>();
-            try
-            {
-                query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
-                from orders where order_status = 'Paid';";
-                MySqlCommand command = new MySqlCommand(query, connection);
-                MySqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    output.Add(GetOrder(reader));
-                }
-                reader.Close();
-            }
-            catch { }
-            return output;
-        }
-        public List<Order> GetOrderExportInDay()
-        {
-            List<Order> output = new List<Order>();
-            try
-            {
-                query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
-                from orders where order_status = 'Export';";
-                MySqlCommand command = new MySqlCommand(query, connection);
-                MySqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    output.Add(GetOrder(reader));
-                }
-                reader.Close();
-            }
-            catch { }
-            return output;
-        }
-        public bool CreateOrder(Order order)
+        public bool InsertOrder(Order order)
         {
             bool result = false;
             int countphone = 0;
-
+            CustomerDAL cdl = new CustomerDAL();
             MySqlTransaction? tr = null;
             try
             {
                 //Bat dau transaction
                 tr = connection.BeginTransaction();
                 MySqlCommand command = new MySqlCommand(connection, tr);
+                MySqlDataReader reader = null;
+                if(cdl.InsertCustomer(order.OrderCustomer)){
+                    // Neu insert thanh cong tuc la truoc do chua ton tai customer nay
+                    // Lay ra id cua nguoi customer vua moi insert vao database
+                    query = @"select customer_id from customers order by customer_id desc limit 1;";
+                    command.CommandText = query;
+                    reader = command.ExecuteReader();
+                    if(reader.Read()){
+                        order.OrderCustomer.CustomerID = reader.GetInt32("customer_id");
+                    }
+                    reader.Close();
+                }
+                else{
+                    // Neu insert that bai thi truoc do da ton tai customer nay
+                    // Lay ra id cua customer nay
+                    query = @"select customer_id where customer_name = @cusname and Phone_Number = @phonenumber;";
+                    command.CommandText = query;
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@cusname", order.OrderCustomer.CustomerName);
+                    command.Parameters.AddWithValue("@phonenumber", order.OrderCustomer.PhoneNumber);
+                    if(reader.Read()){
+                        order.OrderCustomer.CustomerID = reader.GetInt32("customer_id");
+                    }
+                    reader.Close();
+                }
                 //Thuc thi Insert order vao DB
                 query = @"insert into orders(customer_id, seller_id) 
             value (@cusid, @sellerid);";
                 command.CommandText = query;
                 command.Parameters.Clear();
-                command.Parameters.AddWithValue("@cusid", order.CustomerID);
-                command.Parameters.AddWithValue("@sellerid", order.SellerID);
+                command.Parameters.AddWithValue("@cusid", order.OrderCustomer.CustomerID);
+                command.Parameters.AddWithValue("@sellerid", order.OrderSeller.StaffID);
                 command.ExecuteNonQuery();
                 //Chon ra order vua insert vao DB
                 query = @"select Order_ID from orders order by Order_ID desc limit 1; ";
                 command.CommandText = query;
-                MySqlDataReader reader = command.ExecuteReader();
+                reader = command.ExecuteReader();
                 //Lay ra id cua order vua moi insert
                 if (reader.Read())
                 {
@@ -250,21 +265,40 @@ namespace DAL
             }
             return result;
         }
-        public bool Payment(Order order){
+        public bool UpdateOrder(int statusFilter, Order order){
             try{
-                query = @"update orders set accountant_id = @accountantid, order_status = @orderstatus, paymentmethod = @paymentmethod 
+                MySqlCommand command = new MySqlCommand("", connection);
+                switch(statusFilter){
+                    case StatusFilter.Paid:
+                    query = @"update orders set accountant_id = @accountantid, order_status = @orderstatus, paymentmethod = @paymentmethod 
                 where order_id = @orderid;";
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@accountantid", order.AccountantID);
-                command.Parameters.AddWithValue("@orderstatus", order.OrderStatus);
-                command.Parameters.AddWithValue("@paymentmethod", order.PaymentMethod);
-                command.Parameters.AddWithValue("@orderid", order.OrderID);
-                command.ExecuteNonQuery();
+                    break;
+                    case StatusFilter.Export:
+                    query = @"update orders set order_status = @orderstatus where order_id = @orderid;";
+                    break;
+                }
+                if(statusFilter == StatusFilter.Paid){
+                    command.CommandText = query;
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@accountantid", order.OrderAccountant.StaffID);
+                    command.Parameters.AddWithValue("@orderstatus", order.OrderStatus);
+                    command.Parameters.AddWithValue("@paymentmethod", order.PaymentMethod);
+                    command.Parameters.AddWithValue("@orderid", order.OrderID);
+                    command.ExecuteNonQuery();
+                }
+                else if(statusFilter == StatusFilter.Export){
+                    command.CommandText = query;
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@orderstatus", order.OrderStatus);
+                    command.Parameters.AddWithValue("@orderid", order.OrderID);
+                    command.ExecuteNonQuery();
+                }
+                else return false;
             }catch(MySqlException ex){
                 Console.WriteLine(ex.Message);
             }
             return true;
         }
+
     }
 }

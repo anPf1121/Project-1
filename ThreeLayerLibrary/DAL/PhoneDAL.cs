@@ -1,9 +1,14 @@
 using MySqlConnector;
 using Persistence;
 
-
 namespace DAL
 {
+    public static class ItemFilter
+    {
+        public const int GET_ALL = 0;
+        public const int FILTER_BY_ITEM_INFORMATION = 1;
+        public const int FILTER_BY_ITEM_HAVE_DISCOUNT = 2;
+    }
     public class PhoneDAL
     {
         private string query = "";
@@ -39,14 +44,32 @@ namespace DAL
             item.OS = reader.GetString("OS");
             return item;
         }
-        public List<Phone> GetItems()
+        public List<Phone> GetItems(int itemFilter, string? input)
         {
             List<Phone> lst = new List<Phone>();
             try
             {
-                MySqlCommand cmdDataBase = new MySqlCommand("SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones", connection);
-                MySqlDataReader DBReader;
-                DBReader = cmdDataBase.ExecuteReader();
+                MySqlCommand command = new MySqlCommand("", connection);
+                switch(itemFilter){
+                    case ItemFilter.GET_ALL:
+                    query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones";
+                    break;
+                    case ItemFilter.FILTER_BY_ITEM_INFORMATION:
+                    query =  @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones WHERE Phone_Name LIKE @input
+                OR Brand LIKE @input OR CPUnit LIKE @input OR RAM LIKE @input OR Battery_Capacity LIKE @input OR OS LIKE @input
+                OR Sim_Slot LIKE @input OR Screen_Hz LIKE @input OR Screen_Resolution LIKE @input OR ROM LIKE @input OR Mobile_Network LIKE @input 
+                OR Phone_Size LIKE @input OR Price LIKE @input OR DiscountPrice LIKE @input;";
+                    break;
+                    case ItemFilter.FILTER_BY_ITEM_HAVE_DISCOUNT:
+                    query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones where DiscountPrice != '0';";
+                    break;
+                }
+                command.CommandText = query;
+                if(itemFilter == ItemFilter.FILTER_BY_ITEM_INFORMATION){
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@input", input);
+                }
+                MySqlDataReader DBReader = command.ExecuteReader();
                 while (DBReader.Read())
                 {
                     lst = new List<Phone>();
@@ -63,90 +86,6 @@ namespace DAL
             }
             return lst;
         }
-        public List<Phone> Search(string input)
-        {
-            List<Phone> output = new List<Phone>();
-            try
-            {
-                MySqlCommand command = new MySqlCommand("", connection);
-                query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones WHERE Phone_Name LIKE @input
-                OR Brand LIKE @input OR CPUnit LIKE @input OR RAM LIKE @input OR Battery_Capacity LIKE @input OR OS LIKE @input
-                OR Sim_Slot LIKE @input OR Screen_Hz LIKE @input OR Screen_Resolution LIKE @input OR ROM LIKE @input OR Mobile_Network LIKE @input 
-                OR Phone_Size LIKE @input OR Price LIKE @input OR DiscountPrice LIKE @input;";
-                command.CommandText = query;
-                command.Parameters.AddWithValue("@input", "%" + input + "%");
-                MySqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    output.Add(GetItem(reader));
-                }
-                reader.Close();
-            }
-            catch(MySqlException ex) {
-                Console.WriteLine(ex.Message);
-             }
-            return output;
-        }
-        public List<Phone> GetPhoneHaveDiscount()
-        {
-            List<Phone> output = new List<Phone>();
-            try
-            {
-                query = @"select * from Phones where DiscountPrice != '0';";
-                MySqlCommand command = new MySqlCommand(query, connection);
-                MySqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    output.Add(GetItem(reader));
-                }
-                reader.Close();
-            }
-            catch { }
-            return output;
-        }
-        public bool InsertItem(Phone phone)
-        {
-            int check = 0;
-            int phoneid = 0;
-            try
-            {
-                query = @"select phone_id from phones where phone_name = @phonename and brand = @brand and price = @price and os = @os;";
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@phonename", phone.PhoneName);
-                command.Parameters.AddWithValue("@brand", phone.Brand);
-                command.Parameters.AddWithValue("@price", phone.Price);
-                command.Parameters.AddWithValue("@os", phone.OS);
-                MySqlDataReader reader = command.ExecuteReader();
-                if(reader.Read()){
-                    phoneid = reader.GetInt32("Phone_ID");
-                    check++;
-                }
-                reader.Close();
-                if(check==0){
-                    query = @"insert into phones(phone_name, brand, price, os, quantity) value(@phonename, @brand, @price, @os, @quantity);";
-                    command.CommandText = query;
-                    command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@phonename", phone.PhoneName);
-                    command.Parameters.AddWithValue("@brand", phone.Brand);
-                    command.Parameters.AddWithValue("@price", phone.Price);
-                    command.Parameters.AddWithValue("@os", phone.OS);
-                    command.Parameters.AddWithValue("@quantity", phone.Quantity);
-                    command.ExecuteNonQuery();
-                }else{
-                    query = @"update phones set quantity = quantity+@quan 
-                    where phone_id = @phoneid;";
-                    command.CommandText = query;
-                    command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@quan", phone.Quantity);
-                    command.Parameters.AddWithValue("@phoneid", phoneid);
-                    command.ExecuteNonQuery();
-                }
-            }
-            catch(MySqlException ex) {
-                Console.WriteLine(ex.Message);
-            }
-            return true;
-        }
+        
     }
 }
