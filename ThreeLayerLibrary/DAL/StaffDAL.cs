@@ -38,7 +38,7 @@ namespace DAL
             output.UserName = reader.GetString("User_Name");
             output.Password = reader.GetString("Password");
             output.Address = reader.GetString("Address");
-            output.TitleID = reader.GetInt32("Title_ID");
+            output.Role = (E.Staff.Role)Enum.Parse(typeof(E.Staff.Role), reader.GetString("Role"));
             return output;
         }
         public string CreateMD5(string input)
