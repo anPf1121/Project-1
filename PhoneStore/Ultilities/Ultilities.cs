@@ -187,7 +187,7 @@ namespace Ults
             else if (choice == 2) return 2;
             else return -1;
         }
-        public E.Staff.Role LoginUlt()
+        public E.Staff.Role? LoginUlt()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             ConsoleUlts.Title(null, @"                            ██       ██████   ██████  ██ ███    ██ 
@@ -217,7 +217,7 @@ namespace Ults
             }
             while (key.Key != ConsoleKey.Enter);
             pass = pass.Substring(0, pass.Length - 1);
-            return StaffBL.Authenticate(userName, pass).Role;
+            return StaffBL.Authenticate(userName, pass);
         }
         public void PressEnterTo(string? action)
         {
@@ -340,22 +340,26 @@ namespace Ults
                                                             else if (input.Key == ConsoleKey.N)
                                                             {
                                                                 string PatternPhone = @"^0[0-9]{9,}$";
-                                                                Customer customer = new Customer();
+                                                                Customer? customer = null;
                                                                 ConsoleUlts.TinyLine();
                                                                 Console.WriteLine("CUSTOMER INFORMATION");
                                                                 Console.Write("Customer Name: ");
-                                                                customer.CustomerName = Console.ReadLine() ?? "";
+                                                                string customerName = Console.ReadLine() ?? "";
                                                                 Console.Write("Phone number: ");
-                                                                customer.PhoneNumber = Console.ReadLine() ?? "";
-                                                                while (!(Regex.IsMatch(customer.PhoneNumber, PatternPhone, RegexOptions.IgnoreCase)))
+                                                                string phoneNumber = Console.ReadLine() ?? "";
+                                                                while (!(Regex.IsMatch(phoneNumber, PatternPhone, RegexOptions.IgnoreCase)))
                                                                 {
-                                                                    Console.WriteLine($"{customer.PhoneNumber} is not an Phone Number!");
+                                                                    Console.WriteLine($"{phoneNumber} is not an Phone Number!");
                                                                     Console.Write("Phone number: ");
-                                                                    customer.PhoneNumber = Console.ReadLine() ?? "";
+                                                                    phoneNumber = Console.ReadLine() ?? "";
                                                                 }
                                                                 Console.Write("Address: ");
-                                                                customer.Address = Console.ReadLine();
-
+                                                                string address = Console.ReadLine() ?? "";
+                                                                customer = new Customer(null,
+                                                                                        customerName, 
+                                                                                        null, 
+                                                                                        phoneNumber,
+                                                                                        address);
                                                                 while (activeConfirmOrCancel)
                                                                 {
                                                                     // Confirm Order

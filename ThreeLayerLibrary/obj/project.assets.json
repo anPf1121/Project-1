@@ -1752,11 +1752,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anngu\\Desktop\\Project-1\\Project-1\\ThreeLayerLibrary\\ThreeLayerLibrary.csproj",
+      "projectUniqueName": "C:\\Users\\anngu\\Desktop\\P1\\Project-1\\ThreeLayerLibrary\\ThreeLayerLibrary.csproj",
       "projectName": "ThreeLayerLibrary",
-      "projectPath": "C:\\Users\\anngu\\Desktop\\Project-1\\Project-1\\ThreeLayerLibrary\\ThreeLayerLibrary.csproj",
+      "projectPath": "C:\\Users\\anngu\\Desktop\\P1\\Project-1\\ThreeLayerLibrary\\ThreeLayerLibrary.csproj",
       "packagesPath": "C:\\Users\\anngu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anngu\\Desktop\\Project-1\\Project-1\\ThreeLayerLibrary\\obj\\",
+      "outputPath": "C:\\Users\\anngu\\Desktop\\P1\\Project-1\\ThreeLayerLibrary\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\anngu\\AppData\\Roaming\\NuGet\\NuGet.Config",

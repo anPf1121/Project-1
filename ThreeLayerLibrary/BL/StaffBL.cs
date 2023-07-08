@@ -8,22 +8,26 @@ namespace BL;
 public class StaffBL
 {
     private StaffDAL idal = new StaffDAL();
-    public Staff? Authenticate(string username, string password)
+    public E.Staff.Role? Authenticate(string username, string password)
     {
-        Staff staff = new Staff();
+        Staff? staff = null;
         staff = idal.GetAccountByUsername(username);
 
-        string hashedInputPassword = idal.CreateMD5(password);
-        if (hashedInputPassword.Equals(staff.Password))
+        if (staff != null)
         {
-            if (staff.Role == E.Staff.Role.Seller)
-                return staff;
+            string hashedInputPassword = idal.CreateMD5(password);
+            if (hashedInputPassword.Equals(staff.Password))
+            {
+                if (staff.Role == E.Staff.Role.Seller)
+                    return E.Staff.Role.Seller;
 
-            else if (staff.Role == E.Staff.Role.Accountant)
-                return staff;
+                else if (staff.Role == E.Staff.Role.Accountant)
+                    return E.Staff.Role.Accountant;
 
-            else 
-                return null;
+                else
+                    return null;
+            }
+            else return null;
         }
         else return null;
     }

@@ -7,11 +7,11 @@ namespace BL;
 public class CustomerBL
 {
     private CustomerDAL cdal = new CustomerDAL();
-    public Customer GetOrderByPhoneNumber(string information)
+    public Customer? GetOrderByPhoneNumber(string information)
     {
         return cdal.GetCustomerByInfo(0, information);
     }
-    public Customer GetOrderById(string information)
+    public Customer? GetOrderById(string information)
     {
         return cdal.GetCustomerByInfo(1, information);
     }

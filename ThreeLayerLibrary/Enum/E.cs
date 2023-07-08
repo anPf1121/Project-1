@@ -5,8 +5,8 @@ namespace E
     {
         public enum Role
         {
-            Seller = 1,
-            Accountant = 2,
+            Seller,
+            Accountant,
         }
     }
     public class Feature

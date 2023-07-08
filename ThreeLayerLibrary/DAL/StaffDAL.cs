@@ -9,9 +9,9 @@ namespace DAL
     {
         private MySqlConnection connection = DbConfig.GetConnection();
         private string query = "";
-        public Staff GetAccountByUsername(string userName)
+        public Staff? GetAccountByUsername(string userName)
         {
-            Staff staff = new Staff();
+            Staff? staff = null;
             int count = 0;
             try
             {
@@ -32,13 +32,12 @@ namespace DAL
         }
         public Staff GetStaff(MySqlDataReader reader)
         {
-            Staff output = new Staff();
-            output.StaffID = reader.GetInt32("Staff_ID");
-            output.StaffName = reader.GetString("Staff_Name");
-            output.UserName = reader.GetString("User_Name");
-            output.Password = reader.GetString("Password");
-            output.Address = reader.GetString("Address");
-            output.Role = (E.Staff.Role)Enum.Parse(typeof(E.Staff.Role), reader.GetString("Role"));
+            Staff output = new Staff(reader.GetInt32("Staff_ID"),
+                                     reader.GetString("Staff_Name"),
+                                     reader.GetString("User_Name"),
+                                     reader.GetString("Password"),
+                                     reader.GetString("Address"),
+                                     (E.Staff.Role)Enum.Parse(typeof(E.Staff.Role), reader.GetString("Role")));
             return output;
         }
         public string CreateMD5(string input)

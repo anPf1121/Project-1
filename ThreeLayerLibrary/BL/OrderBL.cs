@@ -7,11 +7,15 @@ namespace BL;
 public class OrderBL
 {
     private OrderDAL odal = new OrderDAL();
-    public Order GetOrderById(int itemId)
+    public Order? GetOrderById(int itemId)
     {
-        return odal.GetOrderByID(itemId);
+        Order? order = odal.GetOrderByID(itemId);
+        if (order != null)
+            return odal.GetOrderByID(itemId);
+        else return null;
     }
-    public List<Phone> GetItemsInOrderByID(int id) {
+    public List<Phone> GetItemsInOrderByID(int id)
+    {
         return odal.GetItemsInOrderByID(id);
     }
     public List<Order>? GetOrderHaveProcessingStatus()
@@ -32,13 +36,16 @@ public class OrderBL
         if (list.Count() == 0) return null;
         else return list;
     }
-    public bool UpdateOrderHavePaidStatus(Order order) {
+    public bool UpdateOrderHavePaidStatus(Order order)
+    {
         return odal.UpdateOrder(0, order);
     }
-    public bool UpdateOrderHaveExportStatus(Order order) {
+    public bool UpdateOrderHaveExportStatus(Order order)
+    {
         return odal.UpdateOrder(0, order);
     }
-    public bool InsertOrder(Order order) {
+    public bool InsertOrder(Order order)
+    {
         return odal.InsertOrder(order);
     }
 }
