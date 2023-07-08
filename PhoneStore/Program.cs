@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Persistence;
 using Ults;
@@ -26,27 +26,27 @@ namespace PhoneStoreUI
                     mainChoice = Ultilities.StartMenu();
                     if (mainChoice == 1)
                     {
-                        loginAccount = Ultilities.LoginUlt();
+                        loginAccount.Role = Ultilities.LoginUlt();
 
-                        if (loginAccount == (int)Enum.Account.AccountType.Seller)
+                        if (loginAccount.Role == E.Staff.Role.Seller)
                             SellerAccount = Ultilities.SellerMenu();
 
-                        else if (loginAccount == (int)Enum.Account.AccountType.Accountant)
+                        else if (loginAccount.Role == E.Staff.Role.Accountant)
                             AccountantAccount = Ultilities.AccountantMenu();
 
                         else {
-                            ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Username Or Password");
+                            ConsoleUlts.Alert(E.Feature.Alert.Error, "Invalid Username Or Password");
                             Main();
                         }
                     }
                     else if (mainChoice == 2)
                     {
-                        ConsoleUlts.Alert(Feature.Alert.Success, "Exiting Success");
+                        ConsoleUlts.Alert(E.Feature.Alert.Success, "Exiting Success");
                         return;
                     }
                     else
                     {
-                        ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Choice");
+                        ConsoleUlts.Alert(E.Feature.Alert.Error, "Invalid Choice");
                         Main();
                     }
                 } while (mainChoice != 2);

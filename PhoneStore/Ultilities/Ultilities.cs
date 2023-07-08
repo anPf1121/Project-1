@@ -218,7 +218,9 @@ namespace Ults
             }
             while (key.Key != ConsoleKey.Enter);
             pass = pass.Substring(0, pass.Length - 1);
-            return StaffBL.Authenticate(userName, pass);
+                return StaffBL.Authenticate(userName, pass).Role;
+            }
+            return null;
         }
         public void PressEnterTo(string? action)
         {

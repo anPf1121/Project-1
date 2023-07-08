@@ -5,5 +5,5 @@ public class Staff{
     public string Address{get;set;} = "default";
     public string UserName{get;set;} = "default";
     public string Password{get;set;} = "default";
-    public int TitleID{get;set;}
+    public E.Staff.Role Role{get;set;}
 }
