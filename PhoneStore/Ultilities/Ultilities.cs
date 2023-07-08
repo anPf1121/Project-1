@@ -1,6 +1,5 @@
 using Persistence;
 using BL;
-using Enum;
 using Org.BouncyCastle.Math.Field;
 using System.Text.RegularExpressions;
 
@@ -28,7 +27,7 @@ namespace Ults
                 int.TryParse(Console.ReadLine(), out choice);
                 if (choice <= 0 || choice > menuItem.Count())
                 {
-                    ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Choice, Please Try Again");
+                    ConsoleUlts.Alert(E.Feature.Alert.Error, "Invalid Choice, Please Try Again");
                 }
             } while (choice <= 0 || choice > menuItem.Count());
             return choice;
@@ -121,7 +120,7 @@ namespace Ults
                                     }
                                     else
                                     {
-                                        consoleUlts.Alert(Feature.Alert.Error, "Invalid Input (Y/N)");
+                                        consoleUlts.Alert(E.Feature.Alert.Error, "Invalid Input (Y/N)");
                                     }
                                 } while (!validInput);
                             }
@@ -135,7 +134,7 @@ namespace Ults
             }
             else
             {
-                ConsoleUlts.Alert(Feature.Alert.Warning, "Phone Not Found");
+                ConsoleUlts.Alert(E.Feature.Alert.Warning, "Phone Not Found");
                 PressEnterTo("Back To Previous Menu");
             }
             return false;
@@ -188,7 +187,7 @@ namespace Ults
             else if (choice == 2) return 2;
             else return -1;
         }
-        public int LoginUlt()
+        public E.Staff.Role LoginUlt()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             ConsoleUlts.Title(null, @"                            ██       ██████   ██████  ██ ███    ██ 
@@ -218,9 +217,7 @@ namespace Ults
             }
             while (key.Key != ConsoleKey.Enter);
             pass = pass.Substring(0, pass.Length - 1);
-                return StaffBL.Authenticate(userName, pass).Role;
-            }
-            return null;
+            return StaffBL.Authenticate(userName, pass).Role;
         }
         public void PressEnterTo(string? action)
         {
@@ -274,7 +271,7 @@ namespace Ults
                                 listSearch = phoneBL.SearchByPhoneInformation(searchPhone);
                                 if (listSearch == null)
                                 {
-                                    ConsoleUlts.Alert(Feature.Alert.Warning, "Phone Not Found");
+                                    ConsoleUlts.Alert(E.Feature.Alert.Warning, "Phone Not Found");
                                     ConsoleUlts.Title(null,
                                     @"    ███████ ███████  █████  ██████   ██████ ██   ██     ██████  ██   ██  ██████  ███    ██ ███████ 
     ██      ██      ██   ██ ██   ██ ██      ██   ██     ██   ██ ██   ██ ██    ██ ████   ██ ██      
@@ -300,7 +297,7 @@ namespace Ults
 
 
                                                 if (phoneId <= 0 || phoneId > phones.Count())
-                                                    ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Phone ID, Please Try Again");
+                                                    ConsoleUlts.Alert(E.Feature.Alert.Error, "Invalid Phone ID, Please Try Again");
 
                                             } while (phoneId <= 0 || phoneId > phones.Count());
                                             Console.Clear();
@@ -323,7 +320,7 @@ namespace Ults
                                                             int.TryParse(Console.ReadLine(), out phoneQuantity);
 
                                                             if (phoneQuantity <= 0 || phoneQuantity > phone.Quantity)
-                                                                ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Quantity, Please Try Again");
+                                                                ConsoleUlts.Alert(E.Feature.Alert.Error, "Invalid Quantity, Please Try Again");
                                                         } while (phoneQuantity <= 0 || phoneQuantity > phone.Quantity);
 
                                                         // Nhập IMEI cho mỗi điện thoại tương ứng với số lần so với Quantity
@@ -453,10 +450,10 @@ namespace Ults
             reEnterOrCancel = MenuHandle(null, null, menuOption);
             switch (reEnterOrCancel)
             {
-                case (int)Enum.Feature.SearchPhone.ReEnterPhoneInfo:
+                case (int)E.Feature.SearchPhone.ReEnterPhoneInfo:
                     PressEnterTo("Re-Enter Phone Infomation");
                     break;
-                case (int)Enum.Feature.SearchPhone.CancelOrder:
+                case (int)E.Feature.SearchPhone.CancelOrder:
                     PressEnterTo("Back Previous Menu");
                     result = false;
                     break;
@@ -539,9 +536,9 @@ namespace Ults
                 {
                     case 1:
                         int createOrderStatus = CreateOrderMenuHandle();
-                        if (createOrderStatus == 1) ConsoleUlts.Alert(Feature.Alert.Success, "Create Order Completed");
-                        else if (createOrderStatus == -1) ConsoleUlts.Alert(Feature.Alert.Error, "Don't Have Any Phone To Create Order");
-                        else if (createOrderStatus == 0) ConsoleUlts.Alert(Feature.Alert.Warning, "Create Order Fail");
+                        if (createOrderStatus == 1) ConsoleUlts.Alert(E.Feature.Alert.Success, "Create Order Completed");
+                        else if (createOrderStatus == -1) ConsoleUlts.Alert(E.Feature.Alert.Error, "Don't Have Any Phone To Create Order");
+                        else if (createOrderStatus == 0) ConsoleUlts.Alert(E.Feature.Alert.Warning, "Create Order Fail");
                         else break;
                         break;
                     case 2:

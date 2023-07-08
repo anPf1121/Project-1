@@ -6,23 +6,23 @@ namespace Ults
 {
     class ConsoleUlts
     {
-        public void ConsoleForegroundColor(Enum.UI.Color colorEnum)
+        public void ConsoleForegroundColor(E.UI.Color colorEnum)
         {
             switch (colorEnum)
             {
-                case Enum.UI.Color.Red:
+                case E.UI.Color.Red:
                     Console.ForegroundColor = ConsoleColor.Red;
                     break;
-                case Enum.UI.Color.Green:
+                case E.UI.Color.Green:
                     Console.ForegroundColor = ConsoleColor.Green;
                     break;
-                case Enum.UI.Color.Blue:
+                case E.UI.Color.Blue:
                     Console.ForegroundColor = ConsoleColor.Blue;
                     break;
-                case Enum.UI.Color.Yellow:
+                case E.UI.Color.Yellow:
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     break;
-                case Enum.UI.Color.White:
+                case E.UI.Color.White:
                     Console.ForegroundColor = ConsoleColor.White;
                     break;
                 default:
@@ -43,43 +43,43 @@ namespace Ults
         {
             if (title != null)
             {
-                ConsoleForegroundColor(Enum.UI.Color.White);
+                ConsoleForegroundColor(E.UI.Color.White);
                 Line();
-                ConsoleForegroundColor(Enum.UI.Color.Red);
+                ConsoleForegroundColor(E.UI.Color.Red);
                 Console.WriteLine("\n" + title);
-                ConsoleForegroundColor(Enum.UI.Color.White);
+                ConsoleForegroundColor(E.UI.Color.White);
                 Line();
             }
             if (subTitle != null)
             {
                 Line();
-                ConsoleForegroundColor(Enum.UI.Color.Blue);
+                ConsoleForegroundColor(E.UI.Color.Blue);
                 Console.WriteLine("\n" + subTitle);
-                ConsoleForegroundColor(Enum.UI.Color.White);
+                ConsoleForegroundColor(E.UI.Color.White);
                 Line();
             }
         }
-        public void Alert(Feature.Alert alertType, string msg)
+        public void Alert(E.Feature.Alert alertType, string msg)
         {
             Ultilities Ultilities = new Ultilities();
             switch (alertType)
             {
-                case Feature.Alert.Success:
-                    ConsoleForegroundColor(Enum.UI.Color.Green);
+                case E.Feature.Alert.Success:
+                    ConsoleForegroundColor(E.UI.Color.Green);
                     Console.WriteLine("\n" + msg.ToUpper() + "✅");
                     break;
-                case Feature.Alert.Warning:
-                    ConsoleForegroundColor(Enum.UI.Color.Yellow);
+                case E.Feature.Alert.Warning:
+                    ConsoleForegroundColor(E.UI.Color.Yellow);
                     Console.WriteLine("\n" + msg.ToUpper() + "⚠️");
                     break;
-                case Feature.Alert.Error:
-                    ConsoleForegroundColor(Enum.UI.Color.Red);
+                case E.Feature.Alert.Error:
+                    ConsoleForegroundColor(E.UI.Color.Red);
                     Console.WriteLine("\n" + msg.ToUpper() + "❌");
                     break;
                 default:
                     break;
             }
-            ConsoleForegroundColor(Enum.UI.Color.White);
+            ConsoleForegroundColor(E.UI.Color.White);
             Ultilities.PressEnterTo("Continue");
         }
         public void PrintPhoneInfo(Phone phone)

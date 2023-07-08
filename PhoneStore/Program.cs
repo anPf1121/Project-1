@@ -1,9 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Persistence;
 using Ults;
 using BL;
-using Enum;
 using MySql.Data.MySqlClient;
 using DAL;
 
@@ -17,7 +16,8 @@ namespace PhoneStoreUI
             PhoneBL phoneBL = new PhoneBL();
             Ultilities Ultilities = new Ultilities();
             ConsoleUlts ConsoleUlts = new ConsoleUlts();
-            int loginAccount = 0, mainChoice = 0, SellerAccount = 0, AccountantAccount = 0;
+            Staff? loginAccount = new Staff();
+            int mainChoice = 0, SellerAccount = 0, AccountantAccount = 0;
             bool active = true;
             do
             {
