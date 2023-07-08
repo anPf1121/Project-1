@@ -89,6 +89,7 @@ namespace Ults
         }
         public void PrintPhoneDetailsInfo(Phone phone)
         {
+            Console.WriteLine("PHONE DETAILS");
             TinyLine();
             Console.WriteLine("Phone ID: {0}", phone.PhoneID);
             Console.WriteLine("Phone Name: {0}", phone.PhoneName);
