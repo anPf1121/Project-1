@@ -1,17 +1,9 @@
 
-namespace Enum
+namespace E
 {
     public class Staff
     {
         public enum Role
-        {
-            Seller = 1,
-            Accountant = 2,
-        }
-    }
-    public class Account
-    {
-        public enum AccountType
         {
             Seller = 1,
             Accountant = 2,
