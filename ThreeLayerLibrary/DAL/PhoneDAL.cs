@@ -50,35 +50,33 @@ namespace DAL
             try
             {
                 MySqlCommand command = new MySqlCommand("", connection);
-                switch(itemFilter){
+                switch (itemFilter)
+                {
                     case ItemFilter.GET_ALL:
-                    query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones";
-                    break;
+                        query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS, Quantity FROM phones";
+                        break;
                     case ItemFilter.FILTER_BY_ITEM_INFORMATION:
-                    query =  @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones WHERE Phone_Name LIKE @input
-                OR Brand LIKE @input OR CPUnit LIKE @input OR RAM LIKE @input OR Battery_Capacity LIKE @input OR OS LIKE @input
+                        query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones WHERE Phone_Name LIKE @input
+                OR Brand LIKE @input OR CPU LIKE @input OR RAM LIKE @input OR Battery_Capacity LIKE @input OR OS LIKE @input
                 OR Sim_Slot LIKE @input OR Screen_Hz LIKE @input OR Screen_Resolution LIKE @input OR ROM LIKE @input OR Mobile_Network LIKE @input 
                 OR Phone_Size LIKE @input OR Price LIKE @input OR DiscountPrice LIKE @input;";
-                    break;
+                        command.Parameters.Clear();
+                        command.Parameters.AddWithValue("@input", input);
+                        break;
                     case ItemFilter.FILTER_BY_ITEM_HAVE_DISCOUNT:
-                    query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones where DiscountPrice != '0';";
-                    break;
+                        query = @"SELECT Phone_ID, Phone_Name, Brand, Price, OS FROM phones where DiscountPrice != '0';";
+                        break;
+                    default:
+                        break;
                 }
                 command.CommandText = query;
-                if(itemFilter == ItemFilter.FILTER_BY_ITEM_INFORMATION){
-                    command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@input", input);
-                }
-                MySqlDataReader DBReader = command.ExecuteReader();
-                while (DBReader.Read())
+                MySqlDataReader reader = command.ExecuteReader();
+                lst = new List<Phone>();
+                while (reader.Read())
                 {
-                    lst = new List<Phone>();
-                    while (DBReader.Read())
-                    {
-                        lst.Add(GetItem(DBReader));
-                    }
+                    lst.Add(GetItem(reader));
                 }
-                DBReader.Close();
+                reader.Close();
             }
             catch (Exception ex)
             {
@@ -86,6 +84,6 @@ namespace DAL
             }
             return lst;
         }
-        
+
     }
 }

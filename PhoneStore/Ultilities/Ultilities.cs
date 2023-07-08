@@ -2,6 +2,7 @@ using Persistence;
 using BL;
 using Enum;
 using Org.BouncyCastle.Math.Field;
+using System.Text.RegularExpressions;
 
 namespace Ults
 {
@@ -10,6 +11,8 @@ namespace Ults
         private PhoneBL phoneBL = new PhoneBL();
         private ConsoleUlts ConsoleUlts = new ConsoleUlts();
         private StaffBL StaffBL = new StaffBL();
+        private CustomerBL customerBL = new CustomerBL();
+        private OrderBL orderBL = new OrderBL();
         public int MenuHandle(string? title, string? subTitle, string[] menuItem)
         {
             int i = 0, choice;
@@ -80,7 +83,10 @@ namespace Ults
                                 Console.Clear();
                             }
 
-                            else if (input.Key == ConsoleKey.B) return null;
+                            else if (input.Key == ConsoleKey.B)
+                            {
+                                return null;
+                            }
 
                             else if (input.Key == ConsoleKey.Spacebar)
                             {
@@ -230,6 +236,9 @@ namespace Ults
             bool active = true;
             bool activeSearchPhone = true;
             bool active2 = true;
+            bool activeEnterOrBack = true;
+            bool activeChoseMoreOrContinue = true;
+            bool activeConfirmOrCancel = true;
             List<Phone>? phones = phoneBL.GetAllItem();
             ConsoleKeyInfo input = new ConsoleKeyInfo();
             if (phones != null)
@@ -292,73 +301,106 @@ namespace Ults
                                                     ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Phone ID, Please Try Again");
 
                                             } while (phoneId <= 0 || phoneId > phones.Count());
-
+                                            Console.Clear();
                                             Phone phone = phoneBL.GetItemById(phoneId);
                                             if (phone != null)
                                             {
-                                                ConsoleUlts.PrintPhoneDetailsInfo(phone);
-                                                Console.WriteLine("Press Enter To Add this phone to Order or Press B to back previous Menu: ");
-                                                input = Console.ReadKey(true);
-                                                if (input.Key == ConsoleKey.B)
-                                                    break;
-
-                                                else if (input.Key == ConsoleKey.Enter)
+                                                activeEnterOrBack = true;
+                                                while (activeEnterOrBack)
                                                 {
-                                                    // input phone quantity (số lượng điện thoại)
-                                                    do
-                                                    {
-                                                        Console.Write("Enter Quantity: ");
-                                                        int.TryParse(Console.ReadLine(), out phoneQuantity);
-
-                                                        if (phoneQuantity <= 0 || phoneQuantity > phone.Quantity)
-                                                            ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Quantity, Please Try Again");
-                                                    } while (phoneQuantity <= 0 || phoneQuantity > phone.Quantity);
-
-                                                    // Nhập IMEI cho mỗi điện thoại tương ứng với số lần so với Quantity
-
-                                                    order.ListPhone.Add(phone);
-                                                    // hỏi người dùng có muốn chọn thêm điện thoại vào Hóa đơn được hay không?
-                                                    Console.WriteLine("Press 'Y' To Choose More Other Phone or Press 'N' To Continue Input customer Information");
+                                                    ConsoleUlts.PrintPhoneDetailsInfo(phone);
+                                                    Console.WriteLine("Press Enter To Add this phone to Order or Press B to back previous Menu: ");
                                                     input = Console.ReadKey(true);
-                                                    if (input.Key == ConsoleKey.Y)
+                                                    if (input.Key == ConsoleKey.B) break;
+                                                    else if (input.Key == ConsoleKey.Enter)
                                                     {
-                                                        break;
+                                                        // input phone quantity (số lượng điện thoại)
+                                                        do
+                                                        {
+                                                            Console.Write("Enter Quantity: ");
+                                                            int.TryParse(Console.ReadLine(), out phoneQuantity);
+
+                                                            if (phoneQuantity <= 0 || phoneQuantity > phone.Quantity)
+                                                                ConsoleUlts.Alert(Feature.Alert.Error, "Invalid Quantity, Please Try Again");
+                                                        } while (phoneQuantity <= 0 || phoneQuantity > phone.Quantity);
+
+                                                        // Nhập IMEI cho mỗi điện thoại tương ứng với số lần so với Quantity
+
+                                                        order.ListPhone.Add(phone);
+                                                        // hỏi người dùng có muốn chọn thêm điện thoại vào Hóa đơn được hay không?
+                                                        while (activeChoseMoreOrContinue)
+                                                        {
+                                                            Console.WriteLine("Press 'Y' To Choose More Other Phone or Press 'N' To Continue Input customer Information");
+                                                            input = Console.ReadKey(true);
+                                                            if (input.Key == ConsoleKey.Y)
+                                                            {
+                                                                activeEnterOrBack = false;
+                                                                break;
+                                                            }
+                                                            // NHập thông tin khách hàng mua
+                                                            else if (input.Key == ConsoleKey.N)
+                                                            {
+                                                                string PatternPhone = @"^0[0-9]{9,}$";
+                                                                Customer customer = new Customer();
+                                                                ConsoleUlts.TinyLine();
+                                                                Console.WriteLine("CUSTOMER INFORMATION");
+                                                                Console.Write("Customer Name: ");
+                                                                customer.CustomerName = Console.ReadLine() ?? "";
+                                                                Console.Write("Phone number: ");
+                                                                customer.PhoneNumber = Console.ReadLine() ?? "";
+                                                                while (!(Regex.IsMatch(customer.PhoneNumber, PatternPhone, RegexOptions.IgnoreCase)))
+                                                                {
+                                                                    Console.WriteLine($"{customer.PhoneNumber} is not an Phone Number!");
+                                                                    Console.Write("Phone number: ");
+                                                                    customer.PhoneNumber = Console.ReadLine() ?? "";
+                                                                }
+                                                                Console.Write("Address: ");
+                                                                customer.Address = Console.ReadLine();
+
+                                                                while (activeConfirmOrCancel)
+                                                                {
+                                                                    // Confirm Order
+                                                                    Console.WriteLine("Press 'Y' To Confirm Order or Press 'N' to Cancel Order: ");
+                                                                    input = Console.ReadKey(true);
+                                                                    if (input.Key == ConsoleKey.Y)
+                                                                    {
+                                                                        customerBL.InsertCustomer(customer);
+                                                                        order.OrderCustomer = customer;
+
+                                                                        //orderBL.InsertOrder(order);
+                                                                        // ở đây ta sẽ Insert Customer vào database thông qua lớp BL
+                                                                        // Insert order vào Database thông qua lớp BL
+                                                                        return 1;
+                                                                    }
+                                                                    else if (input.Key == ConsoleKey.N)
+                                                                    {
+                                                                        activeConfirmOrCancel = false;
+                                                                        return 0;
+                                                                    }
+                                                                    else Console.Clear();
+                                                                    ConsoleUlts.PrintPhoneDetailsInfo(phone);
+                                                                }
+                                                            }
+                                                            else Console.Clear();
+                                                            ConsoleUlts.PrintPhoneDetailsInfo(phone);
+                                                        }
+
                                                     }
-                                                    // NHập thông tin khách hàng mua
-                                                    else if (input.Key == ConsoleKey.N)
-                                                    {
-                                                        Customer customer = new Customer();
-                                                        ConsoleUlts.TinyLine();
-                                                        Console.WriteLine("CUSTOMER INFORMATION");
-                                                        Console.Write("Customer Name: ");
-                                                        customer.CustomerName = Console.ReadLine() ?? "";
-                                                        Console.Write("Phone number: ");
-                                                        customer.PhoneNumber = Console.ReadLine() ?? "";
-                                                        Console.Write("Address: ");
-                                                        customer.Address = Console.ReadLine();
-                                                    }
+                                                    else Console.Clear();
                                                 }
                                             }
-                                            // Confirm Order
-                                            Console.WriteLine("Press 'Y' To Confirm Order or Press 'N' to Cancel Order: ");
-                                            input = Console.ReadKey(true);
-                                            if (input.Key == ConsoleKey.Y)
-                                            {
-                                                // ở đây ta sẽ Insert Customer vào database thông qua lớp BL
-                                                // Insert order vào Database thông qua lớp BL
-                                                return 1;
-                                            }
-                                            else if (input.Key == ConsoleKey.N)
-                                                return 0;
                                         }
+                                        else
+                                            active2 = false;
+                                        activeSearchPhone = false;
                                     } while (active2);
-
                                 }
                             } while (activeSearchPhone);
                             break;
                         case 2:
                             active = false;
-                            return 0;
+                            return 2;
+
                     }
                 }
             }
