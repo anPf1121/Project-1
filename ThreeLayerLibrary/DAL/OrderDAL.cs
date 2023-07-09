@@ -19,25 +19,17 @@ namespace DAL
 
         private MySqlConnection connection = DbConfig.GetConnection();
         private string query = "";
-        public Order GetOrder(MySqlDataReader reader)
+         public Order GetOrder(MySqlDataReader reader)
         {
             Order output = new Order();
             output.OrderID = reader.GetInt32("Order_ID");
-            output.OrderCustomer = new Customer(reader.GetInt32("Customer_ID"), 
-                                                reader.GetString("Customer_Name"),
-                                                reader.GetString("Job"),
-                                                reader.GetString("Phone_Number"),
-                                                reader.GetString("Address"));
-            output.OrderSeller = new Staff(reader.GetInt32("Staff_ID"), 
-                                           reader.GetString("Staff_Name"),
-                                           reader.GetString("User_Name"),
-                                           reader.GetString("Password"),
-                                           reader.GetString("Address"),
-                                           (E.Staff.Role)Enum.Parse(typeof(E.Staff.Role), reader.GetString("Role"))); 
+            output.OrderCustomer.CustomerID = reader.GetInt32("Customer_ID");
+            output.OrderSeller.StaffID = reader.GetInt32("Seller_ID");
             output.OrderAccountant.StaffID = reader.GetInt32("Accountant_ID");
             output.OrderDate = reader.GetDateTime("Order_Date");
             output.OrderStatus = reader.GetString("Order_Status");
             output.PaymentMethod = reader.GetString("Paymentmethod");
+            output.ListPhone = GetItemsInOrderByID(reader.GetInt32("Order_ID"));
             return output;
         }
 

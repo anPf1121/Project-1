@@ -12,6 +12,7 @@ namespace Ults
         private StaffBL StaffBL = new StaffBL();
         private CustomerBL customerBL = new CustomerBL();
         private OrderBL orderBL = new OrderBL();
+        private Staff? OrderStaff;
         public int MenuHandle(string? title, string? subTitle, string[] menuItem)
         {
             int i = 0, choice;
@@ -217,7 +218,8 @@ namespace Ults
             }
             while (key.Key != ConsoleKey.Enter);
             pass = pass.Substring(0, pass.Length - 1);
-            return StaffBL.Authenticate(userName, pass);
+            OrderStaff = StaffBL.Authenticate(userName, pass);
+            return OrderStaff.Role;
         }
         public void PressEnterTo(string? action)
         {
@@ -232,12 +234,7 @@ namespace Ults
         public int CreateOrderMenuHandle()
         {
             Order order = new Order();
-            bool active = true;
-            bool activeSearchPhone = true;
-            bool active2 = true;
-            bool activeEnterOrBack = true;
-            bool activeChoseMoreOrContinue = true;
-            bool activeConfirmOrCancel = true;
+            bool active = true, activeSearchPhone = true, active2 = true, activeEnterOrBack = true, activeChoseMoreOrContinue = true, activeConfirmOrCancel = true;
             List<Phone>? phones = phoneBL.GetAllItem();
             ConsoleKeyInfo input = new ConsoleKeyInfo();
             if (phones != null)
@@ -356,8 +353,8 @@ namespace Ults
                                                                 Console.Write("Address: ");
                                                                 string address = Console.ReadLine() ?? "";
                                                                 customer = new Customer(null,
-                                                                                        customerName, 
-                                                                                        null, 
+                                                                                        customerName,
+                                                                                        null,
                                                                                         phoneNumber,
                                                                                         address);
                                                                 while (activeConfirmOrCancel)
@@ -367,7 +364,6 @@ namespace Ults
                                                                     input = Console.ReadKey(true);
                                                                     if (input.Key == ConsoleKey.Y)
                                                                     {
-                                                                        customerBL.InsertCustomer(customer);
                                                                         order.OrderCustomer = customer;
 
                                                                         //orderBL.InsertOrder(order);
