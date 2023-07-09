@@ -12,7 +12,6 @@ public class StaffBL
     {
         Staff? staff = null;
         staff = idal.GetAccountByUsername(username);
-
         if (staff != null)
         {
             string hashedInputPassword = idal.CreateMD5(password);

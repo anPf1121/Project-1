@@ -28,7 +28,7 @@ namespace PhoneStoreUI
                     {
                         loginAccount = Ultilities.LoginUlt();
 
-                        if (loginAccount == E.Staff.Role.Seller)
+                        if (loginAccount == E.Staff.Role.Seller) 
                             SellerAccount = Ultilities.SellerMenu();
 
                         else if (loginAccount == E.Staff.Role.Accountant)

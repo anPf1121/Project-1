@@ -47,6 +47,7 @@ namespace DAL
             item.SimSlot = reader.GetString("Sim_Slot");
             item.ScreenHz = reader.GetString("Screen_Hz");
             item.ScreenResolution = reader.GetString("Screen_Resolution");
+            item.BatteryCapacity = reader.GetString("Battery_Capacity");
             item.ROM = reader.GetString("ROM");
             item.StorageMemory = reader.GetString("StorageMemory");
             item.MobileNetwork = reader.GetString("Mobile_Network");

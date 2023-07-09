@@ -32,13 +32,14 @@ namespace DAL
         }
         public Staff GetStaff(MySqlDataReader reader)
         {
-            Staff output = new Staff(reader.GetInt32("Staff_ID"),
-                                     reader.GetString("Staff_Name"),
-                                     reader.GetString("User_Name"),
-                                     reader.GetString("Password"),
-                                     reader.GetString("Address"),
-                                     (E.Staff.Role)Enum.Parse(typeof(E.Staff.Role), reader.GetString("Role")));
-            return output;
+            Staff staff = new Staff(
+                reader.GetInt32("Staff_ID"),
+                reader.GetString("Staff_Name"),
+                reader.GetString("Address"),
+                reader.GetString("User_Name"),
+                reader.GetString("Password"),
+                (E.Staff.Role)Enum.Parse(typeof(E.Staff.Role), reader.GetString("Role")));
+            return staff;
         }
         public string CreateMD5(string input)
         {
