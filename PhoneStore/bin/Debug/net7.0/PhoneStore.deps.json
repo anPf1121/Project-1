@@ -122,6 +122,17 @@
           }
         }
       },
+      "MySQLConnection/1.0.1": {
+        "dependencies": {
+          "MySql.Data": "8.0.33"
+        },
+        "runtime": {
+          "lib/MySQLConnection.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "MySqlConnector/2.2.6": {
         "runtime": {
           "lib/net7.0/MySqlConnector.dll": {
@@ -306,6 +317,7 @@
       "ThreeLayerLibrary/1.0.0": {
         "dependencies": {
           "MySql.Data": "8.0.33",
+          "MySQLConnection": "1.0.1",
           "MySqlConnector": "2.2.6"
         },
         "runtime": {
@@ -375,6 +387,13 @@
       "sha512": "sha512-mW+A9tc0s+3E3+XYe80aJmr/AvZoKBZG44w13AdVf4+1iRDwgdL6eLMPZgHyQFGwdLwNvQNPKegcOE4rRDuv8Q==",
       "path": "mysql.data/8.0.33",
       "hashPath": "mysql.data.8.0.33.nupkg.sha512"
+    },
+    "MySQLConnection/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/BflH+iLaysGbkUghDuQfrxc2Xi5ckxnqlTLlZYslYrFatqMv9+2d24EvVGKTsJO+hAZeuSs6jcO2ZIvxkkkqQ==",
+      "path": "mysqlconnection/1.0.1",
+      "hashPath": "mysqlconnection.1.0.1.nupkg.sha512"
     },
     "MySqlConnector/2.2.6": {
       "type": "package",

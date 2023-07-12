@@ -22,9 +22,9 @@
 -- )engine = InnoDB;
 
 -- INSERT INTO phones (Phone_Name, Brand, CPU, RAM, DiscountPrice, Price, Battery_Capacity, OS, Sim_Slot, Screen_Hz, Screen_Resolution, ROM, StorageMemory, Mobile_Network, quantity, phone_size) 
--- value('Samsung Galaxy A50', 'Samsung', 'Octa-core (4x2.3 GHz Cortex-A73 & 4x1.7 GHz Cortex-A53)', '4GB', '400000', '5000000', '4,000mAh Li-Ion; 15W quick charge', 'Android', '2', '6.4" Super AMOLED; 19.5:9 aspect ratio', 'FullHD+ (1080 x 2340 px)', '5GB', '4GB of RAM + 128GB storage / 6GB of RAM + 128GB storage; Up to 512GB microSD card support', '4G', '36', '1080 x 2340 px');
+-- value('Samsung Galaxy A50', 'Samsung', 'Octa-core (4x2.3 GHz Cortex-A73 & 4x1.7 GHz Cortex-A53)', '4GB', '400000', '5000000', '4,000mAh Li-Ion; 15W quick charge', 'Android', '2', '6.4" Super AMOLED; 19.5:9 aspect ratio', 'FullHD+ (1080 x 2340 px)', '5GB', '4GB of RAM + 128GB storage / 6GB of RAM + 128GB storage; Up to 512GB microSD card support', '4G', '0', '1080 x 2340 px');
 -- INSERT INTO phones (Phone_Name, Brand, CPU, RAM, DiscountPrice, Price, Battery_Capacity, OS, Sim_Slot, Screen_Hz, Screen_Resolution, ROM, StorageMemory, Mobile_Network, quantity, phone_size) 
--- value('Iphone 14 Pro Max', 'Apple', 'Apple A16 Bionic', '6GB', '500000', '10000000', 'Li-Ion 4323 mAh, non-removable (16.68 Wh)', 'IOS', '2', '120Hz', '1290 x 2796 pixels, 19.5:9 ratio (~460 ppi density)', '10GB', '128GB 6GB RAM, 256GB 6GB RAM, 512GB 6GB RAM, 1TB 6GB RAM', '4G', '100', '6.7 inches, 110.2 cm2 (~88.3% screen-to-body ratio)');
+-- value('Iphone 14 Pro Max', 'Apple', 'Apple A16 Bionic', '6GB', '500000', '10000000', 'Li-Ion 4323 mAh, non-removable (16.68 Wh)', 'IOS', '2', '120Hz', '1290 x 2796 pixels, 19.5:9 ratio (~460 ppi density)', '10GB', '128GB 6GB RAM, 256GB 6GB RAM, 512GB 6GB RAM, 1TB 6GB RAM', '4G', '0', '6.7 inches, 110.2 cm2 (~88.3% screen-to-body ratio)');
 
 -- SELECT * FROM phones;
 
@@ -49,7 +49,6 @@
 -- insert into customers(customer_name, job, phone_number, address)value('Nguyen Xuan Sinh', 'Teacher', '0969696969', 'aaa');
 -- insert into customers(customer_name, job, phone_number, address)value('Nguyen Thien An', 'Student', '0969696969', 'bbb');
 
-
 -- CREATE TABLE Staffs(
 -- Staff_ID INT auto_increment,
 -- Staff_Name VARCHAR(50) NOT NULL,
@@ -59,18 +58,20 @@
 -- Role ENUM('Seller', 'Accountant') NOT NULL,
 -- PRIMARY KEY (Staff_ID)
 -- )engine = InnoDB;
--- insert into staffs(address, staff_name, user_name, password, title_id) 
--- value('Cau The Huc	', 'Kha Banh', 'seller01', 'e99a18c428cb38d5f260853678922e03', '1');
--- insert into staffs(address, staff_name, user_name, password, title_id) 
--- value('Thap Rua', 'Truong con', 'seller02', 'e99a18c428cb38d5f260853678922e03', '1');
--- insert into staffs(address, staff_name, user_name, password, title_id) 
--- value('Chua Mot Cot', 'Dau cat moi', 'accountant01', 'e99a18c428cb38d5f260853678922e03', '2');
+-- insert into staffs(staff_id, staff_name, user_name, password, address, role) value('0', 'default', 'default', 'default', 'no', 'Accountant');
+-- update staffs set staff_id = '0' where staff_name = 'default' limit 1;
+-- insert into staffs(address, staff_name, user_name, password, Role) 
+-- value('Cau The Huc	', 'Kha Banh', 'seller01', 'e99a18c428cb38d5f260853678922e03', 'Seller');
+-- insert into staffs(address, staff_name, user_name, password, Role) 
+-- value('Thap Rua', 'Truong con', 'seller02', 'e99a18c428cb38d5f260853678922e03', 'Seller');
+-- insert into staffs(address, staff_name, user_name, password, Role) 
+-- value('Chua Mot Cot', 'Dau cat moi', 'accountant01', 'e99a18c428cb38d5f260853678922e03', 'Accountant');
 
 -- CREATE TABLE Orders(
 -- Order_ID INT auto_increment,
--- Customer_ID INT,
+-- Customer_ID int,
 -- Seller_ID INT,
--- Accountant_ID INT default '0',
+-- Accountant_ID INT,
 -- Order_Date DATETIME NOT NULL default current_timestamp(),
 -- Order_Note VARCHAR(100),
 -- Order_Status VARCHAR(50) NOT NULL default 'Processing',
@@ -81,12 +82,20 @@
 -- PRIMARY KEY (Order_ID)
 -- )engine = InnoDB;
 
+-- create table phonedetails(
+-- phone_id int not null,
+-- phone_imei varchar(15) not null primary key,
+-- status enum('Not Export', 'Export') not null default 'Not Export',
+-- constraint fk_phone_id foreign key (phone_id) references phones(phone_id)
+-- )engine = InnoDB;
+
 -- create table orderdetails(
 -- order_id int not null,
 -- phone_id int not null,
--- phone_imei varchar(20) not null,
+-- phone_imei varchar(15) not null,
 -- constraint fk_order_id_od foreign key(order_id) references orders(order_id),
 -- constraint fk_phone_id_od foreign key(phone_id) references phones(phone_id),
+-- constraint fk_phone_imei foreign key(phone_imei) references phonedetails(phone_imei),
 -- constraint pk_orderdetails primary key(order_id, phone_id, phone_imei)
 -- )engine = InnoDB;
 
@@ -99,4 +108,74 @@
 -- end$$
 -- delimiter ;
 
+-- delimiter $$
+-- create trigger after_insert_on_phonedetails after insert on phonedetails
+-- for each row
+-- begin
+-- update phones set quantity = quantity+1 where phone_id = new.phone_id;
+-- end$$
+-- delimiter ;
 
+-- delimiter $$
+-- create trigger after_insert_on_orderdetails2 after insert on orderdetails
+-- for each row
+-- begin
+-- update phonedetails set status = 'Export' where phone_imei = new.phone_imei;
+-- end$$
+-- delimiter ;
+
+-- insert into orders(customer_id, seller_id) value('1', '2');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905436456524');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905323232524');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '352423452534555');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '352432452343544');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905432323213');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905443242344');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353931243456454');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353765767656756');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '356546345422345');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353907656456524');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905478687988');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905675676586');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353909459493823');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905345436575');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905437658797');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905438888888');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905437777777');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905654656545');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353965656565656');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353904545454566');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353978687876876');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353906546546556');
+-- insert into phonedetails(phone_id, phone_imei) value('1', '353905654654656');
+
+-- CREATE TABLE discountpolicies (
+-- policy_id INT AUTO_INCREMENT,
+-- policy_name VARCHAR(100) NOT NULL,
+-- from_date DATETIME NOT NULL,
+-- to_date DATETIME NOT NULL,
+-- description VARCHAR(150), 
+-- primary key(policy_id)
+-- )engine = InnoDB;
+
+-- insert into discountpolicies(policy_name, from_date, to_date, desciption) values ('Samsung Big Sale', '2022-06-09 01:15:00', '2023-06-09 01:15:00', 'Giảm giá Samsung Galaxy A50 từ ngày 09 tháng 06 năm 2022 đến ngày 09 tháng 06 năm 2023');
+-- insert into discountpolicies(policy_name, from_date, to_date, desciption) values ('Apple Big Sale', '2022-12-31 01:15:00', '2023-12-31 01:15:00', 'Giảm giá Iphone 14 Promax từ ngày 31 tháng 12 năm 2022 đến ngày 31 tháng 12 năm 2023');
+
+-- CREATE TABLE phonediscount (
+-- phone_id int,
+-- policy_id int,
+-- discount_price decimal not null,
+-- foreign key(phone_id) references phones(phone_id),
+-- foreign key(policy_id) references discountpolicy(policy_id)
+-- )engine = InnoDB;
+
+-- insert into phonediscount(phone_id, policy_id, discount_price) values (1, 1, 500000);
+-- insert into phonediscount(phone_id, policy_id, discount_price) values (2, 2, 600000);
+
+-- CREATE TABLE orderdiscount (
+-- order_id int,
+-- policy_id int,
+-- discount_price decimal not null,
+-- foreign key(order_id) references orders(order_id),
+-- foreign key(policy_id) references discountpolicy(policy_id)
+-- )engine = InnoDB;

@@ -15,6 +15,10 @@ namespace DAL
             int count = 0;
             try
             {
+                if (connection.State == System.Data.ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
                 string query = @"select * from staffs where user_name = @username;";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.Clear();
@@ -28,17 +32,21 @@ namespace DAL
                 reader.Close();
             }
             catch { }
+            if (connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close();
+            }
             return staff;
         }
         public Staff GetStaff(MySqlDataReader reader)
         {
-            Staff staff = new Staff(
-                reader.GetInt32("Staff_ID"),
-                reader.GetString("Staff_Name"),
-                reader.GetString("Address"),
-                reader.GetString("User_Name"),
-                reader.GetString("Password"),
-                (E.Staff.Role)Enum.Parse(typeof(E.Staff.Role), reader.GetString("Role")));
+            Staff staff = new Staff();
+            staff.StaffID = reader.GetInt32("Staff_ID");
+            staff.StaffName = reader.GetString("Staff_Name");
+            staff.Address = reader.GetString("Address");
+            staff.UserName = reader.GetString("User_Name");
+            staff.Password = reader.GetString("Password");
+            staff.Role = (E.Staff.Role)Enum.Parse(typeof(E.Staff.Role), reader.GetString("Role"));
             return staff;
         }
         public string CreateMD5(string input)

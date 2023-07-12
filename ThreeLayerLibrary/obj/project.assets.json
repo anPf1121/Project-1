@@ -147,6 +147,18 @@
           }
         }
       },
+      "MySQLConnection/1.0.1": {
+        "type": "package",
+        "dependencies": {
+          "MySql.Data": "6.9.8"
+        },
+        "compile": {
+          "lib/MySQLConnection.dll": {}
+        },
+        "runtime": {
+          "lib/MySQLConnection.dll": {}
+        }
+      },
       "MySqlConnector/2.2.6": {
         "type": "package",
         "compile": {
@@ -699,6 +711,18 @@
         "runtimes/win-x64/native/k5sprt64.dll",
         "runtimes/win-x64/native/krb5_64.dll",
         "runtimes/win-x64/native/krbcc64.dll"
+      ]
+    },
+    "MySQLConnection/1.0.1": {
+      "sha512": "/BflH+iLaysGbkUghDuQfrxc2Xi5ckxnqlTLlZYslYrFatqMv9+2d24EvVGKTsJO+hAZeuSs6jcO2ZIvxkkkqQ==",
+      "type": "package",
+      "path": "mysqlconnection/1.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/MySQLConnection.dll",
+        "mysqlconnection.1.0.1.nupkg.sha512",
+        "mysqlconnection.nuspec"
       ]
     },
     "MySqlConnector/2.2.6": {
@@ -1743,6 +1767,7 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "MySql.Data >= 8.0.33",
+      "MySqlConnection >= 1.0.1",
       "MySqlConnector >= 2.2.6"
     ]
   },
@@ -1752,11 +1777,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anngu\\Desktop\\P1\\Project-1\\ThreeLayerLibrary\\ThreeLayerLibrary.csproj",
+      "projectUniqueName": "C:\\Users\\anngu\\Desktop\\Project-1\\ThreeLayerLibrary\\ThreeLayerLibrary.csproj",
       "projectName": "ThreeLayerLibrary",
-      "projectPath": "C:\\Users\\anngu\\Desktop\\P1\\Project-1\\ThreeLayerLibrary\\ThreeLayerLibrary.csproj",
+      "projectPath": "C:\\Users\\anngu\\Desktop\\Project-1\\ThreeLayerLibrary\\ThreeLayerLibrary.csproj",
       "packagesPath": "C:\\Users\\anngu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anngu\\Desktop\\P1\\Project-1\\ThreeLayerLibrary\\obj\\",
+      "outputPath": "C:\\Users\\anngu\\Desktop\\Project-1\\ThreeLayerLibrary\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\anngu\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1789,6 +1814,10 @@
             "target": "Package",
             "version": "[8.0.33, )"
           },
+          "MySqlConnection": {
+            "target": "Package",
+            "version": "[1.0.1, )"
+          },
           "MySqlConnector": {
             "target": "Package",
             "version": "[2.2.6, )"
@@ -1813,5 +1842,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'MySQLConnection 1.0.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "MySQLConnection",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    }
+  ]
 }

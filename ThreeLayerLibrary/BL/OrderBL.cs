@@ -7,34 +7,29 @@ namespace BL;
 public class OrderBL
 {
     private OrderDAL odal = new OrderDAL();
-    public Order? GetOrderById(int itemId)
+    public Order GetOrderById(int itemId)
     {
-        Order? order = odal.GetOrderByID(itemId);
-        if (order != null)
-            return odal.GetOrderByID(itemId);
-        else return null;
+        return odal.GetOrderByID(itemId);
     }
     public List<Phone> GetItemsInOrderByID(int id)
     {
         return odal.GetItemsInOrderByID(id);
     }
-    public List<Order>? GetOrderHaveProcessingStatus()
+    public List<Order> GetOrderHaveProcessingStatus()
     {
-        List<Order> list = odal.GetOrders(0);
-        if (list.Count() == 0) return null;
-        else return list;
+        List<Order> list = odal.GetOrdersInDay(0);
+
+        return list;
     }
-    public List<Order>? GetOrderHavePaidStatus()
+    public List<Order> GetOrderHavePaidStatus()
     {
-        List<Order> list = odal.GetOrders(1);
-        if (list.Count() == 0) return null;
-        else return list;
+        List<Order> list = odal.GetOrdersInDay(1);
+        return list;
     }
-    public List<Order>? GetOrderHaveExportStatus()
+    public List<Order> GetOrderHaveExportStatus()
     {
-        List<Order> list = odal.GetOrders(2);
-        if (list.Count() == 0) return null;
-        else return list;
+        List<Order> list = odal.GetOrdersInDay(2);
+        return list;
     }
     public bool UpdateOrderHavePaidStatus(Order order)
     {
@@ -42,7 +37,7 @@ public class OrderBL
     }
     public bool UpdateOrderHaveExportStatus(Order order)
     {
-        return odal.UpdateOrder(0, order);
+        return odal.UpdateOrder(1, order);
     }
     public bool InsertOrder(Order order)
     {

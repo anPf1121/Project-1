@@ -12,18 +12,24 @@ public class CustomerDAL
     }
     public Customer GetCustomer(MySqlDataReader reader)
     {
-        Customer customer = new Customer(reader.GetInt32("Customer_ID"),
-                                       reader.GetString("Customer_Name"),
-                                       reader.GetString("Phone_Number"),
-                                       reader.GetString("Address"),
-                                       reader.GetString("Job"));
-        return customer;
+        Customer output = new Customer();
+        output.CustomerID = reader.GetInt32("Customer_ID");
+        output.CustomerName = reader.GetString("Customer_Name");
+        output.PhoneNumber = reader.GetString("Phone_Number");
+        output.Address = reader.GetString("Address");
+        output.Job = reader.GetString("Job");
+        return output;
     }
     public List<Customer> GetCustomersByName(string name)
     {
         List<Customer> output = new List<Customer>();
         try
         {
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+
+            }
             query = @"select * from customers where Customer_Name like @name;";
             MySqlCommand command = new MySqlCommand(query, connection);
             command.Parameters.Clear();
@@ -35,7 +41,15 @@ public class CustomerDAL
             }
             reader.Close();
         }
-        catch { }
+        catch (MySqlException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        if (connection.State == System.Data.ConnectionState.Open)
+        {
+            connection.Close();
+
+        }
         return output;
     }
     public Customer? GetCustomerByInfo(int informationFilter, string info)
@@ -43,6 +57,11 @@ public class CustomerDAL
         Customer? customer = null;
         try
         {
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+
+            }
             switch (informationFilter)
             {
                 case InformationFilter.GET_BY_PHONE:
@@ -64,6 +83,11 @@ public class CustomerDAL
         {
             Console.WriteLine(ex.Message);
         }
+        if (connection.State == System.Data.ConnectionState.Open)
+        {
+            connection.Close();
+
+        }
         return customer;
     }
     public bool InsertCustomer(Customer newcustomer)
@@ -71,6 +95,11 @@ public class CustomerDAL
         int count = 0;
         try
         {
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+
+            }
             query = @"select Customer_Name, Phone_Number, Address, Job from customers 
             where Customer_Name = @cusname and Phone_Number = @phonenumber;";
             MySqlCommand command = new MySqlCommand(query, connection);
@@ -96,6 +125,11 @@ public class CustomerDAL
         catch (MySqlException ex)
         {
             Console.WriteLine(ex.Message);
+        }
+        if (connection.State == System.Data.ConnectionState.Open)
+        {
+            connection.Close();
+
         }
         return false;
     }

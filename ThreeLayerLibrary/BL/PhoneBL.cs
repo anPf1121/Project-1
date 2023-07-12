@@ -28,5 +28,10 @@ public class PhoneBL
             else return idal.GetItems(1, phoneInformation);
         }
     }
-
+    public bool CheckImeiExist(string imei, Phone phone){
+        return idal.CheckImeiExist(imei, phone);
+    }
+    public List<Phone> PhonesHaveDiscount() {
+        return idal.GetItems(2, null);
+    }
 }

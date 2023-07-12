@@ -12,34 +12,74 @@ namespace DAL
     {
         public const int Paid = 0;
         public const int Export = 1;
-
     }
     public class OrderDAL
     {
 
         private MySqlConnection connection = DbConfig.GetConnection();
         private string query = "";
-         public Order GetOrder(MySqlDataReader reader)
+        public Order GetOrder(MySqlDataReader reader)
         {
             Order output = new Order();
             output.OrderID = reader.GetInt32("Order_ID");
+            output.OrderCustomer = new Customer();
             output.OrderCustomer.CustomerID = reader.GetInt32("Customer_ID");
+            output.OrderAccountant = new Staff();
+            output.OrderSeller = new Staff();
             output.OrderSeller.StaffID = reader.GetInt32("Seller_ID");
             output.OrderAccountant.StaffID = reader.GetInt32("Accountant_ID");
             output.OrderDate = reader.GetDateTime("Order_Date");
             output.OrderStatus = reader.GetString("Order_Status");
             output.PaymentMethod = reader.GetString("Paymentmethod");
-            output.ListPhone = GetItemsInOrderByID(reader.GetInt32("Order_ID"));
+
+            return output;
+        }
+        public Customer GetOrderCustomer(int id)
+        {
+            Customer output = new Customer();
+            CustomerDAL cusdl = new CustomerDAL();
+            try
+            {
+                if (connection.State == System.Data.ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                query = @"select c.Customer_ID, c.Customer_Name,c.Phone_Number, c.Job, c.Address 
+            from customers c inner join orders o on c.customer_id = o.customer_id
+            where o.order_id = @orderid;";
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@orderid", id);
+                MySqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    output = cusdl.GetCustomer(reader);
+                }
+                reader.Close();
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            if (connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close();
+            }
             return output;
         }
 
+
         // + lay id cua staff cho order tu phuong thuc GetOrderByID(int id)
-        public Order? GetOrderByID(int id)
+        public Order GetOrderByID(int id)
         {
-            Order? output = null;
+            Order output = new Order();
             try
             {
-                query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
+                if (connection.State == System.Data.ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod 
                 from orders where order_id = @orderid;";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.Clear();
@@ -50,12 +90,16 @@ namespace DAL
                     output = GetOrder(reader);
                 }
                 reader.Close();
-                if (output != null)
-                    output.ListPhone = GetItemsInOrderByID(id);
+                output.ListPhone = GetItemsInOrderByID(id);
+                output.OrderCustomer = GetOrderCustomer(id);
             }
             catch (MySqlException ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            if (connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close();
             }
             return output;
         }
@@ -65,7 +109,11 @@ namespace DAL
             List<Phone> currentList = new List<Phone>();
             try
             {
-                query = @"select p.phone_id, p.phone_name, p.brand , p.price, p.os 
+                if (connection.State == System.Data.ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+                query = @"select * 
                 from phones p inner join orderdetails od on p.phone_id = od.phone_id
                 where od.order_id = @orderid;";
                 MySqlCommand command = new MySqlCommand("", connection);
@@ -109,19 +157,26 @@ namespace DAL
             {
                 Console.WriteLine(ex.Message);
             }
-
+            if (connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close();
+            }
             return currentList;
         }
-        public List<Order> GetOrders(int orderFilter)
+        public List<Order> GetOrdersInDay(int orderFilter)
         {
             List<Order> output = new List<Order>();
             try
             {
+                if (connection.State == System.Data.ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
                 switch (orderFilter)
                 {
                     case OrderFilter.GET_ORDER_PROCESSING_IN_DAY:
                         query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
-                from orders where order_status = 'Unpaid' and date(order_date) = date(current_time());";
+                from orders where order_status = 'Processing';";
                         break;
                     case OrderFilter.GET_ORDER_PAID_IN_DAY:
                         query = @"select order_id, customer_id, seller_id, accountant_id, order_date, order_status, paymentmethod
@@ -140,7 +195,14 @@ namespace DAL
                 }
                 reader.Close();
             }
-            catch { }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            if (connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close();
+            }
             return output;
         }
         public bool InsertOrder(Order order)
@@ -151,6 +213,10 @@ namespace DAL
             MySqlTransaction? tr = null;
             try
             {
+                if (connection.State == System.Data.ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
                 //Bat dau transaction
                 tr = connection.BeginTransaction();
                 MySqlCommand command = new MySqlCommand(connection, tr);
@@ -167,6 +233,7 @@ namespace DAL
                         order.OrderCustomer.CustomerID = reader.GetInt32("customer_id");
                     }
                     reader.Close();
+
                 }
                 else
                 {
@@ -242,12 +309,19 @@ namespace DAL
                             else
                             {
                                 query = @"insert into orderdetails(order_id, phone_id, phone_imei) 
-                                value(@orderid, @phoneid, left(uuid(), 15));";
+                                value(@orderid, @phoneid, @phoneimei);";
                                 command.CommandText = query;
-                                command.Parameters.Clear();
-                                command.Parameters.AddWithValue("@orderid", order.OrderID);
-                                command.Parameters.AddWithValue("@phoneid", phoneid);
-                                for (int i = 0; i < phone.Quantity; i++) command.ExecuteNonQuery();
+                                foreach (var phonedict in order.PhoneWithImei)
+                                {
+                                    if (phonedict.Value.PhoneID == phoneid)
+                                    {
+                                        command.Parameters.Clear();
+                                        command.Parameters.AddWithValue("@orderid", order.OrderID);
+                                        command.Parameters.AddWithValue("@phoneid", phoneid);
+                                        command.Parameters.AddWithValue("@phoneimei", phonedict.Key);
+                                        command.ExecuteNonQuery();
+                                    }
+                                }
                                 countphone++;
                             }
 
@@ -290,12 +364,20 @@ namespace DAL
                 }
                 Console.WriteLine(ex.Message);
             }
+            if (connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close();
+            }
             return result;
         }
         public bool UpdateOrder(int statusFilter, Order order)
         {
             try
             {
+                if (connection.State == System.Data.ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
                 MySqlCommand command = new MySqlCommand("", connection);
                 switch (statusFilter)
                 {
@@ -325,6 +407,10 @@ namespace DAL
             catch (MySqlException ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            if (connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close();
             }
             return true;
         }

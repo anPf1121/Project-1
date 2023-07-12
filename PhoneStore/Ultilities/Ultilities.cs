@@ -12,7 +12,7 @@ namespace Ults
         private StaffBL StaffBL = new StaffBL();
         private CustomerBL customerBL = new CustomerBL();
         private OrderBL orderBL = new OrderBL();
-        private Staff? OrderStaff;
+        private Staff? OrderStaff = null;
         public int MenuHandle(string? title, string? subTitle, string[] menuItem)
         {
             int i = 0, choice;
@@ -37,11 +37,10 @@ namespace Ults
         {
             if (listPhone != null)
             {
-                ConsoleUlts consoleUlts = new ConsoleUlts();
                 bool active = true;
                 bool validInput = false;
                 Dictionary<int, List<Phone>> phones = new Dictionary<int, List<Phone>>();
-                phones = MenuPaginationHandle(listPhone);
+                phones = PhoneMenuPaginationHandle(listPhone);
                 int countPage = phones.Count(), currentPage = 1;
                 ConsoleKeyInfo input = new ConsoleKeyInfo();
                 ConsoleKeyInfo input2 = new ConsoleKeyInfo();
@@ -121,7 +120,7 @@ namespace Ults
                                     }
                                     else
                                     {
-                                        consoleUlts.Alert(E.Feature.Alert.Error, "Invalid Input (Y/N)");
+                                        ConsoleUlts.Alert(E.Feature.Alert.Error, "Invalid Input (Y/N)");
                                     }
                                 } while (!validInput);
                             }
@@ -140,7 +139,73 @@ namespace Ults
             }
             return false;
         }
-        public Dictionary<int, List<Phone>> MenuPaginationHandle(List<Phone> phoneList)
+
+        public bool? ListOrderPagination(List<Order> listOrder)
+        {
+            if (listOrder != null)
+            {
+                bool active = true;
+                Dictionary<int, List<Order>> orders = OrderMenuPaginationHandle(listOrder);
+                int countPage = orders.Count(), currentPage = 1;
+                ConsoleKeyInfo input = new ConsoleKeyInfo();
+                while (true)
+                {
+                    ConsoleUlts.Title(
+                        null,
+                        @"
+                     █████  ██      ██           ██████  ██████  ██████  ███████ ██████  ███████ 
+                    ██   ██ ██      ██          ██    ██ ██   ██ ██   ██ ██      ██   ██ ██      
+                    ███████ ██      ██          ██    ██ ██████  ██   ██ █████   ██████  ███████ 
+                    ██   ██ ██      ██          ██    ██ ██   ██ ██   ██ ██      ██   ██      ██ 
+                    ██   ██ ███████ ███████      ██████  ██   ██ ██████  ███████ ██   ██ ███████ "
+                    );
+                    while (active)
+                    {
+                        Console.WriteLine("========================================================================================================================");
+                        Console.WriteLine("| {0, 10} | {1, 30} | {2, 20} | {3, 15} |", "ID", "Customer Name", "Order Date", "Status");
+                        Console.WriteLine("========================================================================================================================");
+                        foreach (Order order in orders[currentPage])
+                        {
+                            ConsoleUlts.PrintOrderInfo(order);
+                        }
+                        Console.WriteLine("========================================================================================================================");
+                        Console.WriteLine("{0,55}" + "< " + $"{currentPage}/{countPage}" + " >", " ");
+                        Console.WriteLine("========================================================================================================================");
+                        Console.WriteLine("Press 'Left Arrow' To Back Previous Page, 'Right Arrow' To Next Page");
+                        Console.Write("Press 'Space' To View Order Details, 'B' To Back Previous Menu");
+                        input = Console.ReadKey();
+                        if (input.Key == ConsoleKey.RightArrow)
+                        {
+                            if (currentPage <= countPage - 1) currentPage++;
+                            Console.Clear();
+                        }
+                        else if (input.Key == ConsoleKey.LeftArrow)
+                        {
+                            if (currentPage > 1) currentPage--;
+                            Console.Clear();
+                        }
+
+                        else if (input.Key == ConsoleKey.B)
+                        {
+                            return null;
+                        }
+                        else if (input.Key == ConsoleKey.Spacebar)
+                        {
+                            return true;
+                        }
+                        else
+                            Console.Clear();
+
+                    }
+                }
+            }
+            else
+                ConsoleUlts.Alert(E.Feature.Alert.Warning, "No orders exist");
+            PressEnterTo("Back To Previous Menu");
+            return false;
+
+        }
+        public Dictionary<int, List<Phone>> PhoneMenuPaginationHandle(List<Phone> phoneList)
         {
             List<Phone> sList = new List<Phone>();
             Dictionary<int, List<Phone>> menuTab = new Dictionary<int, List<Phone>>();
@@ -163,6 +228,38 @@ namespace Ults
                     menuTab.Add(idTab, sList);
                 }
                 else if (sList.Count() < itemInTab && secondCount == phoneQuantity)
+                {
+                    idTab++;
+                    menuTab.Add(idTab, sList);
+                }
+                secondCount++;
+                count++;
+            }
+            return menuTab;
+        }
+        public Dictionary<int, List<Order>> OrderMenuPaginationHandle(List<Order> orderList)
+        {
+            List<Order> sList = new List<Order>();
+            Dictionary<int, List<Order>> menuTab = new Dictionary<int, List<Order>>();
+            int orderQuantity = orderList.Count(), itemInTab = 4, numberOfTab = 0, count = 1, secondCount = 1, idTab = 0;
+
+            if (orderQuantity % itemInTab != 0) numberOfTab = (orderQuantity / itemInTab) + 1;
+            else numberOfTab = orderQuantity / itemInTab;
+
+            foreach (Order order in orderList)
+            {
+                if ((count - 1) == itemInTab)
+                {
+                    sList = new List<Order>();
+                    count = 1;
+                }
+                sList.Add(order);
+                if (sList.Count() == itemInTab)
+                {
+                    idTab++;
+                    menuTab.Add(idTab, sList);
+                }
+                else if (sList.Count() < itemInTab && secondCount == orderQuantity)
                 {
                     idTab++;
                     menuTab.Add(idTab, sList);
@@ -207,7 +304,8 @@ namespace Ults
                 if (key.Key != ConsoleKey.Backspace)
                 {
                     pass += key.KeyChar;
-                    Console.Write("*");
+                    if (key.Key != ConsoleKey.Enter)
+                        Console.Write("*");
                 }
                 else if (key.Key == ConsoleKey.Backspace && pass.Length > 0)
                 {
@@ -219,7 +317,9 @@ namespace Ults
             while (key.Key != ConsoleKey.Enter);
             pass = pass.Substring(0, pass.Length - 1);
             OrderStaff = StaffBL.Authenticate(userName, pass);
-            return OrderStaff.Role;
+            if (OrderStaff != null)
+                return OrderStaff.Role;
+            else return null;
         }
         public void PressEnterTo(string? action)
         {
@@ -320,8 +420,7 @@ namespace Ults
                                                                 ConsoleUlts.Alert(E.Feature.Alert.Error, "Invalid Quantity, Please Try Again");
                                                         } while (phoneQuantity <= 0 || phoneQuantity > phone.Quantity);
 
-                                                        // Nhập IMEI cho mỗi điện thoại tương ứng với số lần so với Quantity
-
+                                                        phone.Quantity = phoneQuantity;
                                                         order.ListPhone.Add(phone);
                                                         // hỏi người dùng có muốn chọn thêm điện thoại vào Hóa đơn được hay không?
                                                         while (activeChoseMoreOrContinue)
@@ -337,26 +436,21 @@ namespace Ults
                                                             else if (input.Key == ConsoleKey.N)
                                                             {
                                                                 string PatternPhone = @"^0[0-9]{9,}$";
-                                                                Customer? customer = null;
+                                                                Customer customer = new Customer();
                                                                 ConsoleUlts.TinyLine();
                                                                 Console.WriteLine("CUSTOMER INFORMATION");
                                                                 Console.Write("Customer Name: ");
-                                                                string customerName = Console.ReadLine() ?? "";
+                                                                customer.CustomerName = Console.ReadLine() ?? "";
                                                                 Console.Write("Phone number: ");
-                                                                string phoneNumber = Console.ReadLine() ?? "";
-                                                                while (!(Regex.IsMatch(phoneNumber, PatternPhone, RegexOptions.IgnoreCase)))
+                                                                customer.PhoneNumber = Console.ReadLine() ?? "";
+                                                                while (!(Regex.IsMatch(customer.PhoneNumber, PatternPhone, RegexOptions.IgnoreCase)))
                                                                 {
-                                                                    Console.WriteLine($"{phoneNumber} is not an Phone Number!");
+                                                                    Console.WriteLine($"{customer.PhoneNumber} is not an Phone Number!");
                                                                     Console.Write("Phone number: ");
-                                                                    phoneNumber = Console.ReadLine() ?? "";
+                                                                    customer.PhoneNumber = Console.ReadLine() ?? "";
                                                                 }
                                                                 Console.Write("Address: ");
-                                                                string address = Console.ReadLine() ?? "";
-                                                                customer = new Customer(null,
-                                                                                        customerName,
-                                                                                        null,
-                                                                                        phoneNumber,
-                                                                                        address);
+                                                                customer.Address = Console.ReadLine() ?? "";
                                                                 while (activeConfirmOrCancel)
                                                                 {
                                                                     // Confirm Order
@@ -365,8 +459,9 @@ namespace Ults
                                                                     if (input.Key == ConsoleKey.Y)
                                                                     {
                                                                         order.OrderCustomer = customer;
-
-                                                                        //orderBL.InsertOrder(order);
+                                                                        order.OrderSeller = this.OrderStaff;
+                                                                        order.PhoneWithImei = SetImeiForeachPhone(order);
+                                                                        orderBL.InsertOrder(order);
                                                                         // ở đây ta sẽ Insert Customer vào database thông qua lớp BL
                                                                         // Insert order vào Database thông qua lớp BL
                                                                         return 1;
@@ -405,6 +500,26 @@ namespace Ults
             }
             else return -1;
             return 1;
+        }
+        public Dictionary<string, Phone> SetImeiForeachPhone(Order order)
+        {
+            Dictionary<string, Phone> output = new Dictionary<string, Phone>();
+            List<string> check = new List<string>();
+            foreach (var phone in order.ListPhone)
+            {
+                for (int i = 0; i < phone.Quantity; i++)
+                {
+                    Console.Write($"Input imei for {phone.PhoneName} {i + 1}: ");
+                    string imei = Console.ReadLine() ?? "";
+                    while (phoneBL.CheckImeiExist(imei, phone) == false)
+                    {
+                        Console.Write("Imei doesnt exist or has been sold or not suitable for this phone! \nPlease Re-Enter a new phone imei: ");
+                        imei = Console.ReadLine() ?? "";
+                    }
+                    output.Add(imei, phone);
+                }
+            }
+            return output;
         }
         public void HandleOrderMenuHandle()
         {
@@ -461,13 +576,15 @@ namespace Ults
             return result;
 
         }
-        public void PaymentMenuHandle(Ultilities ultilities)
+        public void PaymentMenuHandle()
         {
+
             bool active = true;
-            string[] paymentItem = { "👉 Search Order by Status", "👉 Discount", "👉 Log Out" };
+            string[] paymentItem = { "👉 Show All Orders Have Processing Status", "👉 Discount", "👉 Log Out" };
             while (active)
             {
-                switch (ultilities.MenuHandle(null, @"
+                List<Order> listProcessingOrder = new List<Order>();
+                switch (MenuHandle(null, @"
                     ██████   █████  ██    ██ ███    ███ ███████ ███    ██ ████████ 
                     ██   ██ ██   ██  ██  ██  ████  ████ ██      ████   ██    ██    
                     ██████  ███████   ████   ██ ████ ██ █████   ██ ██  ██    ██    
@@ -475,7 +592,17 @@ namespace Ults
                     ██      ██   ██    ██    ██      ██ ███████ ██   ████    ██", paymentItem))
                 {
                     case 1:
-                        Console.WriteLine("INPUT ORDER ID:");
+                        // show order có trạng thái processing
+                        listProcessingOrder = orderBL.GetOrderHaveProcessingStatus();
+                        bool? temp = ListOrderPagination(listProcessingOrder);
+                        Console.Write("Choose an order by id to payment: ");
+                        int orderid;
+                        string id = Console.ReadLine() ?? "";
+                        while (!int.TryParse(id, out orderid))
+                        {
+                            Console.Write("Invalid order id please input another: ");
+                            id = Console.ReadLine() ?? "";
+                        }
                         break;
                     case 2:
                         break;
@@ -487,13 +614,13 @@ namespace Ults
                 }
             }
         }
-        public void RevenueMenuHandle(Ultilities ultilities)
+        public void RevenueMenuHandle()
         {
             bool active = true;
             string[] revenueItem = { "👉 Report Revenue in week", "👉 Report Revenue In Month", "👉 Report Revenue In Day", "👉 Report Revenue Quarter Of Year", "👉 Back To Previous Menu" };
             while (active)
             {
-                switch (ultilities.MenuHandle(null, @"
+                switch (MenuHandle(null, @"
                         ██████  ███████ ██    ██ ███████ ███    ██ ██    ██ ███████ 
                         ██   ██ ██      ██    ██ ██      ████   ██ ██    ██ ██      
                         ██████  █████   ██    ██ █████   ██ ██  ██ ██    ██ █████   
@@ -570,10 +697,10 @@ namespace Ults
              ██   ██  ██████  ██████  ██████   ██████  ██   ████    ██    ██   ██ ██   ████    ██ ", menuItem))
                 {
                     case 1:
-                        PaymentMenuHandle(ultilities);
+                        PaymentMenuHandle();
                         break;
                     case 2:
-                        RevenueMenuHandle(ultilities);
+                        RevenueMenuHandle();
                         break;
                     case 3:
                         active = false;

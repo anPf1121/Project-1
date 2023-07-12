@@ -86,6 +86,10 @@ namespace Ults
         {
             Console.WriteLine("| {0, 10} | {1, 30} | {2, 15} | {3, 15} | {4, 15} | {5, 15}  |", phone.PhoneID, phone.PhoneName, phone.Brand, phone.Price, phone.OS, phone.Quantity);
         }
+        public void PrintOrderInfo(Order order)
+        {
+            Console.WriteLine("| {0, 10} | {1, 30} | {2, 15} | {3, 15} |", order.OrderID, order.OrderCustomer.CustomerName, order.OrderDate, order.OrderStatus);
+        }
         public void PrintPhoneDetailsInfo(Phone phone)
         {
             Console.WriteLine("PHONE DETAILS");

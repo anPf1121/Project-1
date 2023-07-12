@@ -1,36 +1,84 @@
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.deps.json
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.pdb
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.csproj.AssemblyReference.cache
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.AssemblyInfoInputs.cache
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.AssemblyInfo.cs
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.csproj.CoreCompileInputs.cache
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\obj\Debug\net7.0\refint\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.pdb
-C:\Users\anngu\Desktop\Thư mục mới (3)\ThreeLayerLibrary\obj\Debug\net7.0\ref\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.deps.json
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.pdb
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.csproj.AssemblyReference.cache
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.AssemblyInfoInputs.cache
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.AssemblyInfo.cs
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.csproj.CoreCompileInputs.cache
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\refint\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.pdb
-C:\Users\anngu\Desktop\Project-1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ref\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.deps.json
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.pdb
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.csproj.AssemblyReference.cache
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.AssemblyInfoInputs.cache
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.AssemblyInfo.cs
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.csproj.CoreCompileInputs.cache
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\refint\ThreeLayerLibrary.dll
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.pdb
-C:\Users\anngu\Desktop\P1\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ref\ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.deps.json
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.AssemblyReference.cache
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfoInputs.cache
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfo.cs
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.CoreCompileInputs.cache
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/obj/Debug/net7.0/refint/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/anngu/Desktop/Thư mục mới (3)/ThreeLayerLibrary/obj/Debug/net7.0/ref/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.deps.json
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.AssemblyReference.cache
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfoInputs.cache
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfo.cs
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.CoreCompileInputs.cache
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/refint/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/anngu/Desktop/Project-1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ref/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.deps.json
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.AssemblyReference.cache
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfoInputs.cache
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfo.cs
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.CoreCompileInputs.cache
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/refint/ThreeLayerLibrary.dll
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/anngu/Desktop/P1/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ref/ThreeLayerLibrary.dll
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.deps.json
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.AssemblyReference.cache
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfoInputs.cache
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfo.cs
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.CoreCompileInputs.cache
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/refint/ThreeLayerLibrary.dll
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/Window 10 NT/Desktop/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ref/ThreeLayerLibrary.dll
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.deps.json
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.AssemblyReference.cache
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfoInputs.cache
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfo.cs
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.CoreCompileInputs.cache
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.dll
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/refint/ThreeLayerLibrary.dll
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.pdb
+C:/Users/anngu/Downloads/TestCase/New folder (14)/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ref/ThreeLayerLibrary.dll
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.deps.json
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.dll
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/bin/Debug/net7.0/ThreeLayerLibrary.pdb
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.AssemblyReference.cache
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfoInputs.cache
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.AssemblyInfo.cs
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.csproj.CoreCompileInputs.cache
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.dll
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/refint/ThreeLayerLibrary.dll
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ThreeLayerLibrary.pdb
+/Users/macos/Documents/ProjectVTC/Project-1/ThreeLayerLibrary/obj/Debug/net7.0/ref/ThreeLayerLibrary.dll
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.csproj.AssemblyReference.cache
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.AssemblyInfoInputs.cache
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.AssemblyInfo.cs
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.csproj.CoreCompileInputs.cache
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.dll
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\refint\ThreeLayerLibrary.dll
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ThreeLayerLibrary.pdb
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.deps.json
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.dll
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\bin\Debug\net7.0\ThreeLayerLibrary.pdb
+C:\Users\anngu\Desktop\Project-1\ThreeLayerLibrary\obj\Debug\net7.0\ref\ThreeLayerLibrary.dll
